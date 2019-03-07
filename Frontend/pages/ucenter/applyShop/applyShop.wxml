@@ -49,7 +49,8 @@
           <text>*详细地址:</text>
          </view>
           <view class="info-text"> 
-            <input name="" class="input-text" disabled placeholder="定位地址" bingtap="nowlocation"/>
+            <input name="" class="input-text" bindtap="nowlocation" disabled 
+            placeholder="定位地址"/>
          </view>
          <view class="info-text"> 
             <input name="" class="input-text" value="{{locat}}" />
