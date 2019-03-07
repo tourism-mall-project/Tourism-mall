@@ -29,6 +29,15 @@ public class LitemallUserService {
         return userVo;
     }
 
+    //通过ID查找出用户的信息
+    public UserVo findUserVoByUserId(Integer userId) {
+        LitemallUser user = findById(userId);
+        UserVo userVo = new UserVo();
+        userVo.setNickname(user.getNickname());
+        userVo.setAvatar(user.getAvatar());
+        return userVo;
+    }
+
     public LitemallUser queryByOid(String openId) {
         LitemallUserExample example = new LitemallUserExample();
         example.or().andWeixinOpenidEqualTo(openId).andDeletedEqualTo(false);

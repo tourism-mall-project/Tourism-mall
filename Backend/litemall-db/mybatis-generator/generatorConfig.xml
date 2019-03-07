@@ -10,7 +10,6 @@
         <!--可以使用``包括字段名，避免字段名与sql保留字冲突报错-->
         <property name="beginningDelimiter" value="`"/>
         <property name="endingDelimiter" value="`"/>
-
         <!-- 自动生成toString方法 -->
         <plugin type="org.mybatis.generator.plugins.ToStringPlugin"/>
         <!-- 自动生成equals方法和hashcode方法 -->
@@ -51,10 +50,14 @@
             <property name="useJSR310Types" value="true"/>
         </javaTypeResolver>
 
+        <!-- 生成模型的包名targetPackage和位置实体bean文件 -->
         <javaModelGenerator targetPackage="org.linlinjava.litemall.db.domain" targetProject="src/main/java"/>
+        <!-- 生成的映射文件报名和位置mapper接口文件 -->
         <sqlMapGenerator targetPackage="org.linlinjava.litemall.db.dao" targetProject="src/main/resources"/>
+        <!-- 生成DAO的包名和位置 mapper的xml文件-->
         <javaClientGenerator type="XMLMAPPER" targetPackage="org.linlinjava.litemall.db.dao"
                              targetProject="src/main/java"/>
+
         <!--表名-->
         <table tableName="litemall_ad">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
@@ -67,6 +70,37 @@
             <columnOverride column="role_ids" javaType="java.lang.Integer[]"
                             typeHandler="org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"/>
         </table>
+
+        <table tableName="litemall_shop">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <columnOverride column="industry_classify" javaType="java.lang.Integer[]"
+                            typeHandler="org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"/>
+            <columnOverride column="shop_facility" javaType="java.lang.Integer[]"
+                            typeHandler="org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"/>
+        </table>
+
+        <!-- 商家的订单表-->
+        <table tableName="litemall_shop_order">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+        </table>
+
+        <!-- 商家的订单详情表-->
+        <table tableName="litemall_shoporder_goods">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <columnOverride column="specifications" javaType="java.lang.String[]"
+                            typeHandler="org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"/>
+            <columnOverride column="comments" javaType="java.lang.Integer[]"
+                            typeHandler="org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler"/>
+        </table>
+
+        <!-- 商家上传的商品表-->
+        <table tableName="litemall_shopgoods">
+            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <columnOverride column="gallery" javaType="java.lang.String[]"
+                            typeHandler="org.linlinjava.litemall.db.mybatis.JsonStringArrayTypeHandler"/>
+        </table>
+
+
         <table tableName="litemall_brand">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>

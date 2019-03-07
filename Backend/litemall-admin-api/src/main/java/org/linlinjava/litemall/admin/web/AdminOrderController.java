@@ -100,4 +100,39 @@ public class AdminOrderController {
         return adminOrderService.reply(body);
     }
 
+
+    //-------------这是书写的店家订单的查询模块-----------
+
+
+    //查询就是查询全部
+    @RequiresPermissions("admin:order:list")
+    @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "查询")
+    @GetMapping("/list")
+    public Object QueryShoplist(Integer userId, String orderSn,
+                       @RequestParam(required = false) List<Short> orderStatusArray,
+                       @RequestParam(defaultValue = "1") Integer page,
+                       @RequestParam(defaultValue = "10") Integer limit,
+                       @Sort @RequestParam(defaultValue = "add_time") String sort,
+                       @Order @RequestParam(defaultValue = "desc") String order) {
+        return adminOrderService.list(userId, orderSn, orderStatusArray, page, limit, sort, order);
+    }
+
+
+    //详情就是通过订单的ID查询详情
+    /**
+     * 订单详情
+     *
+     * @param id
+     * @return
+     */
+    @RequiresPermissions("admin:order:read")
+    @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单详情")
+    @GetMapping("/detail")
+    public Object QueryShopOrder(@NotNull Integer id) {
+        return adminOrderService.QueryOrderByid(id);
+    }
+
+
+
+
 }

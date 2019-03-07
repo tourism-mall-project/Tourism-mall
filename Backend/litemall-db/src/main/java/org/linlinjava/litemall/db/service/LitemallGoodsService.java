@@ -2,9 +2,9 @@ package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
 import org.linlinjava.litemall.db.dao.LitemallGoodsMapper;
-import org.linlinjava.litemall.db.domain.LitemallGoods;
+import org.linlinjava.litemall.db.dao.LitemallShopgoodsMapper;
+import org.linlinjava.litemall.db.domain.*;
 import org.linlinjava.litemall.db.domain.LitemallGoods.Column;
-import org.linlinjava.litemall.db.domain.LitemallGoodsExample;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -18,6 +18,8 @@ public class LitemallGoodsService {
     Column[] columns = new Column[]{Column.id, Column.name, Column.brief, Column.picUrl, Column.isHot, Column.isNew, Column.counterPrice, Column.retailPrice};
     @Resource
     private LitemallGoodsMapper goodsMapper;
+    @Resource
+    private LitemallShopgoodsMapper litemallShopgoodsMapper;
 
     /**
      * 获取热卖商品
@@ -126,12 +128,36 @@ public class LitemallGoodsService {
         return goodsMapper.selectByExampleSelective(example, columns);
     }
 
+
+    //正常的查询
     public List<LitemallGoods> querySelective(String goodsSn, String name, Integer page, Integer size, String sort, String order) {
         LitemallGoodsExample example = new LitemallGoodsExample();
         LitemallGoodsExample.Criteria criteria = example.createCriteria();
 
         if (!StringUtils.isEmpty(goodsSn)) {
             criteria.andGoodsSnEqualTo(goodsSn);
+        }
+        if (!StringUtils.isEmpty(name)) {
+            criteria.andNameLike("%" + name + "%");
+        }
+
+        criteria.andDeletedEqualTo(false);
+
+        if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(order)) {
+            example.setOrderByClause(sort + " " + order);
+        }
+
+        PageHelper.startPage(page, size);
+        return goodsMapper.selectByExampleWithBLOBs(example);
+    }
+
+    //商家的查询商品功能
+     public List<LitemallShopgoods> querySelectiveBycondition(Integer category_id, String name, Integer page, Integer size, String sort, String order) {
+        LitemallShopgoodsExample example = new LitemallShopgoodsExample();
+        LitemallShopgoodsExample.Criteria criteria = example.createCriteria();
+
+        if (!StringUtils.isEmpty(category_id)) {
+            criteria.andCategoryIdEqualTo(category_id);
         }
         if (!StringUtils.isEmpty(name)) {
             criteria.andNameLike("%" + name + "%");
@@ -143,8 +169,11 @@ public class LitemallGoodsService {
         }
 
         PageHelper.startPage(page, size);
-        return goodsMapper.selectByExampleWithBLOBs(example);
+        return litemallShopgoodsMapper.selectByExampleWithBLOBs(example);
     }
+
+
+
 
     /**
      * 获取某个商品信息,包含完整信息
@@ -156,6 +185,13 @@ public class LitemallGoodsService {
         LitemallGoodsExample example = new LitemallGoodsExample();
         example.or().andIdEqualTo(id).andIsOnSaleEqualTo(true).andDeletedEqualTo(false);
         return goodsMapper.selectOneByExampleWithBLOBs(example);
+    }
+
+    //商家通过ID获取到所有的商品信息
+    public LitemallShopgoods findGoodsById(Integer id) {
+        LitemallShopgoodsExample example = new LitemallShopgoodsExample();
+        example.or().andIdEqualTo(id).andIsOnSaleEqualTo(true).andDeletedEqualTo(false);
+        return litemallShopgoodsMapper.selectOneByExampleWithBLOBs(example);
     }
 
     /**
@@ -187,15 +223,37 @@ public class LitemallGoodsService {
         return goodsMapper.updateByPrimaryKeySelective(goods);
     }
 
+    //商家的添加路径的判断和修改
+    public int updateByGoodsId(LitemallShopgoods goods) {
+        goods.setUpdateTime(LocalDateTime.now());
+        return litemallShopgoodsMapper.updateByPrimaryKeySelective(goods);
+    }
+
     public void deleteById(Integer id) {
         goodsMapper.logicalDeleteByPrimaryKey(id);
     }
 
+    //商家删除商品
+    public  void  deleteGoodsById(Integer id){
+        litemallShopgoodsMapper.logicalDeleteByPrimaryKey(id);
+    }
+
+
+    //原有的添加方法
     public void add(LitemallGoods goods) {
         goods.setAddTime(LocalDateTime.now());
         goods.setUpdateTime(LocalDateTime.now());
         goodsMapper.insertSelective(goods);
     }
+
+    //商家进行添加的一部分方法
+    public void addGoods(LitemallShopgoods goods) {
+        goods.setAddTime(LocalDateTime.now());
+        goods.setUpdateTime(LocalDateTime.now());
+        litemallShopgoodsMapper.insertSelective(goods);
+    }
+
+
 
     /**
      * 获取所有物品总数，包括在售的和下架的，但是不包括已删除的商品
@@ -247,4 +305,12 @@ public class LitemallGoodsService {
         example.or().andNameEqualTo(name).andIsOnSaleEqualTo(true).andDeletedEqualTo(false);
         return goodsMapper.countByExample(example) != 0;
     }
+
+    public boolean checkExistByGoodsName(String name) {
+       // LitemallGoodsExample example = new LitemallGoodsExample();
+        LitemallShopgoodsExample example=new LitemallShopgoodsExample();
+        example.or().andNameEqualTo(name).andIsOnSaleEqualTo(true).andDeletedEqualTo(false);
+        return litemallShopgoodsMapper.countByExample(example) != 0;
+    }
+
 }

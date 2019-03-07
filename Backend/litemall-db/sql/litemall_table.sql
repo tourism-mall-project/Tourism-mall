@@ -87,6 +87,35 @@ CREATE TABLE `litemall_admin` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='管理员表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+  DROP TABLE IF EXISTS `litemall_shop`;
+  /*商家入驻表*/
+  CREATE TABLE `litemall_shop` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `industry_classify` varchar(127) DEFAULT '[]' COMMENT '行业分类',
+  `region` varchar (255) NOT NULL DEFAULT '' COMMENT '所属区域',
+  `shop_facility` varchar(127) DEFAULT '[]' COMMENT '店内设施' ,
+  `address` varchar(127) NOT NULL COMMENT '详细地址',
+  `url` varchar(255) NOT NULL COMMENT '上传logo',
+  `shopname` varchar(63) NOT NULL DEFAULT '' COMMENT '店铺名称',
+  `username` varchar(63) NOT NULL DEFAULT '' COMMENT '负责人名称',
+  `shop_introduce` varchar(255) NOT NULL DEFAULT '' COMMENT '广告标题',
+  `service_mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '客服电话',
+  `work_time` datetime DEFAULT NULL COMMENT '营业时间',
+  `workimg_url` varchar(255) NOT NULL COMMENT '营业执照',
+  `storefrontimg_url` varchar(255) NOT NULL COMMENT '门头图片',
+  `password` varchar(63) NOT NULL DEFAULT '' COMMENT '管理员密码',
+  /*`last_login_ip` varchar(63) DEFAULT '' COMMENT '最近一次登录IP地址',
+  `last_login_time` datetime DEFAULT NULL COMMENT '最近一次登录时间',
+  `avatar` varchar(255) DEFAULT '''' COMMENT '头像图片',*/
+  `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+ /* `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  `role_ids` varchar(127) DEFAULT '[]' COMMENT '角色列表',*/
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='商家入住表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
 --
 -- Table structure for table `litemall_brand`
 --
@@ -521,7 +550,87 @@ CREATE TABLE `litemall_order` (
   `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
+ /*!40101 SET character_set_client = @saved_cs_client */;
+
+  /* 商家店铺的商品表*/
+  DROP TABLE IF EXISTS `litemall_shopgoods`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+
+CREATE TABLE `litemall_shopgoods` (
+  `id` int(11) NOT NULL AUTO_INCREMENT ,
+  `shop_id` int(11)  NOT NULL COMMENT '商家ID',
+  `goods_sn` varchar(63) NOT NULL DEFAULT '' COMMENT '商品编号',
+  `name` varchar(127) NOT NULL DEFAULT '' COMMENT '商品名称',
+  `category_id` int(11) DEFAULT '0' COMMENT '商品所属类目ID',
+  `brand_id` int(11) DEFAULT '0',
+  `gallery` varchar(1023) DEFAULT NULL COMMENT '商品宣传图片列表，采用JSON数组格式',
+  `keywords` varchar(255) DEFAULT '' COMMENT '商品关键字，采用逗号间隔',
+  `brief` varchar(255) DEFAULT '' COMMENT '商品简介',
+  `is_on_sale` tinyint(1) DEFAULT '1' COMMENT '是否上架',
+  `sort_order` smallint(4) DEFAULT '100',
+  `pic_url` varchar(255) DEFAULT NULL COMMENT '商品页面商品图片',
+  `share_url` varchar(255) DEFAULT NULL COMMENT '商品分享朋友圈图片',
+  `is_new` tinyint(1) DEFAULT '0' COMMENT '是否新品首发，如果设置则可以在新品首发页面展示',
+  `is_hot` tinyint(1) DEFAULT '0' COMMENT '是否人气推荐，如果设置则可以在人气推荐页面展示',
+  `unit` varchar(31) DEFAULT '’件‘' COMMENT '商品单位，例如件、盒',
+  `counter_price` decimal(10,2) DEFAULT '0.00' COMMENT '专柜价格',
+  `retail_price` decimal(10,2) DEFAULT '100000.00' COMMENT '零售价格',
+  `detail` text COMMENT '商品详细介绍，是富文本格式',
+  `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`),
+  KEY `goods_sn` (`goods_sn`),
+  KEY `cat_id` (`category_id`),
+  KEY `brand_id` (`brand_id`),
+  KEY `sort_order` (`sort_order`)
+) ENGINE=InnoDB AUTO_INCREMENT=1181004 DEFAULT CHARSET=utf8mb4 COMMENT='店家商品基本信息表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
+
+
+  DROP TABLE IF EXISTS `litemall_shop_order`;
+
+   /*
+    这是商家的订单表
+   */
+ CREATE TABLE `litemall_shop_order` (
+  `id` int(11) NOT NULL COMMENT'商家ID',
+  `user_id` int(11) NOT NULL COMMENT '用户表的用户ID',
+  `order_sn` varchar(63) NOT NULL COMMENT '订单编号',
+  `order_status` smallint(6) NOT NULL COMMENT '订单状态',
+  `consignee` varchar(63) NOT NULL COMMENT '收货人名称',
+  `mobile` varchar(63) NOT NULL COMMENT '收货人手机号',
+  `address` varchar(127) NOT NULL COMMENT '收货具体地址',
+  `message` varchar(512) NOT NULL DEFAULT '' COMMENT '用户订单留言',
+  `goods_price` decimal(10,2) NOT NULL COMMENT '商品总费用',
+  `freight_price` decimal(10,2) NOT NULL COMMENT '配送费用',
+  `coupon_price` decimal(10,2) NOT NULL COMMENT '优惠券减免',
+  `integral_price` decimal(10,2) NOT NULL COMMENT '用户积分减免',
+  `groupon_price` decimal(10,2) NOT NULL COMMENT '团购优惠价减免',
+  `order_price` decimal(10,2) NOT NULL COMMENT '订单费用， = goods_price + freight_price - coupon_price',
+  `actual_price` decimal(10,2) NOT NULL COMMENT '实付费用， = order_price - integral_price',
+  `pay_id` varchar(63) DEFAULT NULL COMMENT '微信付款编号',
+  `pay_time` datetime DEFAULT NULL COMMENT '微信付款时间',
+  `ship_sn` varchar(63) DEFAULT NULL COMMENT '发货编号',
+  `ship_channel` varchar(63) DEFAULT NULL COMMENT '发货快递公司',
+  `ship_time` datetime DEFAULT NULL COMMENT '发货开始时间',
+  `confirm_time` datetime DEFAULT NULL COMMENT '用户确认收货时间',
+  `comments` smallint(6) DEFAULT '0' COMMENT '待评价订单商品数量',
+  `end_time` datetime DEFAULT NULL COMMENT '订单关闭时间',
+  `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商家订单表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
+
 
 --
 -- Table structure for table `litemall_order_goods`
@@ -550,6 +659,35 @@ CREATE TABLE `litemall_order_goods` (
   KEY `goods_id` (`goods_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='订单商品表';
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+DROP TABLE IF EXISTS `litemall_shoporder_goods`;
+
+ /*商家的订单详情
+ */
+ CREATE TABLE `litemall_shoporder_goods` (
+  `id` int(11) NOT NULL COMMENT'商家ID',
+  `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '订单表的订单ID',
+  `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品表的商品ID',
+  `goods_name` varchar(127) NOT NULL DEFAULT '' COMMENT '商品名称',
+  `goods_sn` varchar(63) NOT NULL DEFAULT '' COMMENT '商品编号',
+  `product_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品货品表的货品ID',
+  `number` smallint(5) NOT NULL DEFAULT '0' COMMENT '商品货品的购买数量',
+  `price` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT '商品货品的售价',
+  `specifications` varchar(1023) NOT NULL COMMENT '商品货品的规格列表',
+  `pic_url` varchar(255) NOT NULL DEFAULT '' COMMENT '商品货品图片或者商品图片',
+  `comment` int(11) DEFAULT '0' COMMENT '订单商品评论，如果是-1，则超期不能评价；如果是0，则可以评价；如果其他值，则是comment表里面的评论ID。',
+  `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  KEY `goods_id` (`goods_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商家订单详情表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
 
 --
 -- Table structure for table `litemall_permission`

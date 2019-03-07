@@ -2,9 +2,11 @@ package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
 import org.linlinjava.litemall.db.dao.LitemallOrderMapper;
+import org.linlinjava.litemall.db.dao.LitemallShopOrderMapper;
 import org.linlinjava.litemall.db.dao.OrderMapper;
 import org.linlinjava.litemall.db.domain.LitemallOrder;
 import org.linlinjava.litemall.db.domain.LitemallOrderExample;
+import org.linlinjava.litemall.db.domain.LitemallShopOrder;
 import org.linlinjava.litemall.db.util.OrderUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -24,6 +26,8 @@ public class LitemallOrderService {
     private LitemallOrderMapper litemallOrderMapper;
     @Resource
     private OrderMapper orderMapper;
+    @Resource
+    private LitemallShopOrderMapper litemallShopOrderMapper;
 
     public int add(LitemallOrder order) {
         order.setAddTime(LocalDateTime.now());
@@ -39,6 +43,11 @@ public class LitemallOrderService {
 
     public LitemallOrder findById(Integer orderId) {
         return litemallOrderMapper.selectByPrimaryKey(orderId);
+    }
+
+    //通过ID查询订单(商家的订单详情)
+    public LitemallShopOrder FindOrderByID(Integer orderId){
+       return litemallShopOrderMapper.selectByPrimaryKey(orderId);
     }
 
     private String getRandomNum(Integer num) {
