@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
+import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -47,6 +48,9 @@ public class AdminGoodsService {
     @Autowired
     private QCodeService qCodeService;
 
+
+
+    //被模仿的查询
     public Object list(String goodsSn, String name,
                        Integer page, Integer limit, String sort, String order) {
         List<LitemallGoods> goodsList = goodsService.querySelective(goodsSn, name, page, limit, sort, order);
@@ -57,6 +61,21 @@ public class AdminGoodsService {
 
         return ResponseUtil.ok(data);
     }
+
+    //商家的查询商品功能
+    public  Object QueryShopOrder(Integer category_id, String name,
+                                  Integer page, Integer limit, String sort, String order){
+        List<LitemallShopgoods> goodmap=goodsService.querySelectiveBycondition(category_id, name, page, limit, sort,order);
+        long total = PageInfo.of(goodmap).getTotal();
+        Map<String, Object> data = new HashMap<>();
+        data.put("total", total);
+        data.put("items", goodmap);
+
+        return ResponseUtil.ok(data);
+    }
+
+
+
 
     private Object validate(GoodsAllinone goodsAllinone) {
         LitemallGoods goods = goodsAllinone.getGoods();
@@ -217,6 +236,24 @@ public class AdminGoodsService {
         return ResponseUtil.ok();
     }
 
+    //商家删除的商品
+    @Transactional
+    public Object deleteGoods(LitemallShopgoods goods) {
+        Integer id = goods.getId();
+        if (id == null) {
+            return ResponseUtil.badArgument();
+        }
+
+        Integer gid = goods.getId();
+        goodsService.deleteGoodsById(gid);
+        specificationService.deleteByGid(gid);
+        attributeService.deleteByGid(gid);
+        productService.deleteByGid(gid);
+        return ResponseUtil.ok();
+    }
+
+
+
     @Transactional
     public Object create(GoodsAllinone goodsAllinone) {
         Object error = validate(goodsAllinone);
@@ -266,6 +303,61 @@ public class AdminGoodsService {
         return ResponseUtil.ok();
     }
 
+    //商家的添加商品
+    @Transactional
+    public Object createShopGoods(GoodsAllinone goodsAllinone) {
+        Object error = validate(goodsAllinone);
+        if (error != null) {
+            return error;
+        }
+
+        //LitemallGoods goods = goodsAllinone.getGoods();
+        LitemallShopgoods goods=goodsAllinone.getgoodstwo();
+        LitemallGoodsAttribute[] attributes = goodsAllinone.getAttributes();
+        LitemallGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
+        LitemallGoodsProduct[] products = goodsAllinone.getProducts();
+
+        String name = goods.getName();
+        if (goodsService.checkExistByGoodsName(name)) {
+            return ResponseUtil.fail(GOODS_NAME_EXIST, "商品名已经存在");
+        }
+
+        // 商品基本信息表litemall_goods
+        goodsService.addGoods(goods);
+
+        //将生成的分享图片地址写入数据库
+        String url = qCodeService.createGoodShareImage(goods.getId().toString(), goods.getPicUrl(), goods.getName());
+        if (!StringUtils.isEmpty(url)) {
+            goods.setShareUrl(url);
+            if (goodsService.updateByGoodsId(goods) == 0) {
+                throw new RuntimeException("更新数据失败");
+            }
+        }
+
+        // 商品规格表litemall_goods_specification
+        for (LitemallGoodsSpecification specification : specifications) {
+            specification.setGoodsId(goods.getId());
+            specificationService.add(specification);
+        }
+
+        // 商品参数表litemall_goods_attribute
+        for (LitemallGoodsAttribute attribute : attributes) {
+            attribute.setGoodsId(goods.getId());
+            attributeService.add(attribute);
+        }
+
+        // 商品货品表litemall_product
+        for (LitemallGoodsProduct product : products) {
+            product.setGoodsId(goods.getId());
+            productService.add(product);
+        }
+        return ResponseUtil.ok();
+    }
+
+
+
+
+
     public Object list2() {
         // http://element-cn.eleme.io/#/zh-CN/component/cascader
         // 管理员设置“所属分类”
@@ -307,6 +399,7 @@ public class AdminGoodsService {
         return ResponseUtil.ok(data);
     }
 
+    //详情
     public Object detail(Integer id) {
         LitemallGoods goods = goodsService.findById(id);
         List<LitemallGoodsProduct> products = productService.queryByGid(id);
@@ -314,6 +407,36 @@ public class AdminGoodsService {
         List<LitemallGoodsAttribute> attributes = attributeService.queryByGid(id);
 
         Integer categoryId = goods.getCategoryId();
+        LitemallCategory category = categoryService.findcategoryById(categoryId);
+        Integer[] categoryIds = new Integer[]{};
+        if (category != null) {
+            Integer parentCategoryId = category.getPid();
+            categoryIds = new Integer[]{parentCategoryId, categoryId};
+        }
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("goods", goods);
+        data.put("specifications", specifications);
+        data.put("products", products);
+        data.put("attributes", attributes);
+        data.put("categoryIds", categoryIds);
+
+        return ResponseUtil.ok(data);
+    }
+
+    //商家点击查看详情
+    public Object detailByGoods(Integer id) {
+        //查看商品的具体信息
+        LitemallShopgoods goods = goodsService.findGoodsById(id);
+        //查看商品的物品信息
+        List<LitemallGoodsProduct> products = productService.queryByGid(id);
+        //查看商品的规格信息
+        List<LitemallGoodsSpecification> specifications = specificationService.queryByGid(id);
+        //查看商品的属性信息
+        List<LitemallGoodsAttribute> attributes = attributeService.queryByGid(id);
+
+        Integer categoryId = goods.getCategoryId();
+        //查看商品的类别信息
         LitemallCategory category = categoryService.findById(categoryId);
         Integer[] categoryIds = new Integer[]{};
         if (category != null) {
@@ -330,5 +453,79 @@ public class AdminGoodsService {
 
         return ResponseUtil.ok(data);
     }
+
+
+    //***************************************************
+
+    private Object validateByGoods(GoodsAllinone goodsAllinone) {
+        LitemallGoods goods = goodsAllinone.getGoods();
+        String name = goods.getName();
+        if (StringUtils.isEmpty(name)) {
+            return ResponseUtil.badArgument();
+        }
+        String goodsSn = goods.getGoodsSn();
+        if (StringUtils.isEmpty(goodsSn)) {
+            return ResponseUtil.badArgument();
+        }
+        // 品牌商可以不设置，如果设置则需要验证品牌商存在
+        Integer brandId = goods.getBrandId();
+        if (brandId != null && brandId != 0) {
+            if (brandService.findById(brandId) == null) {
+                return ResponseUtil.badArgumentValue();
+            }
+        }
+        // 分类可以不设置，如果设置则需要验证分类存在
+        Integer categoryId = goods.getCategoryId();
+        if (categoryId != null && categoryId != 0) {
+            if (categoryService.findById(categoryId) == null) {
+                return ResponseUtil.badArgumentValue();
+            }
+        }
+
+        LitemallGoodsAttribute[] attributes = goodsAllinone.getAttributes();
+        for (LitemallGoodsAttribute attribute : attributes) {
+            String attr = attribute.getAttribute();
+            if (StringUtils.isEmpty(attr)) {
+                return ResponseUtil.badArgument();
+            }
+            String value = attribute.getValue();
+            if (StringUtils.isEmpty(value)) {
+                return ResponseUtil.badArgument();
+            }
+        }
+
+        LitemallGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
+        for (LitemallGoodsSpecification specification : specifications) {
+            String spec = specification.getSpecification();
+            if (StringUtils.isEmpty(spec)) {
+                return ResponseUtil.badArgument();
+            }
+            String value = specification.getValue();
+            if (StringUtils.isEmpty(value)) {
+                return ResponseUtil.badArgument();
+            }
+        }
+
+        LitemallGoodsProduct[] products = goodsAllinone.getProducts();
+        for (LitemallGoodsProduct product : products) {
+            Integer number = product.getNumber();
+            if (number == null || number < 0) {
+                return ResponseUtil.badArgument();
+            }
+
+            BigDecimal price = product.getPrice();
+            if (price == null) {
+                return ResponseUtil.badArgument();
+            }
+
+            String[] productSpecifications = product.getSpecifications();
+            if (productSpecifications.length == 0) {
+                return ResponseUtil.badArgument();
+            }
+        }
+
+        return null;
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package org.linlinjava.litemall.admin.service;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.binarywang.wxpay.bean.request.WxPayRefundRequest;
 import com.github.binarywang.wxpay.bean.result.WxPayRefundResult;
 import com.github.binarywang.wxpay.exception.WxPayException;
@@ -11,10 +12,7 @@ import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.NotifyType;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.ResponseUtil;
-import org.linlinjava.litemall.db.domain.LitemallComment;
-import org.linlinjava.litemall.db.domain.LitemallOrder;
-import org.linlinjava.litemall.db.domain.LitemallOrderGoods;
-import org.linlinjava.litemall.db.domain.UserVo;
+import org.linlinjava.litemall.db.domain.*;
 import org.linlinjava.litemall.db.service.*;
 import org.linlinjava.litemall.db.util.OrderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +61,11 @@ public class AdminOrderService {
     }
 
     public Object detail(Integer id) {
+        //通过ID查到一个订单
         LitemallOrder order = orderService.findById(id);
+        //通过关联查到所有的订单商品
         List<LitemallOrderGoods> orderGoods = orderGoodsService.queryByOid(id);
+        //先通过订单得到用户的ID，在通过1用户ID查询到用户，结果整和就完成了
         UserVo user = userService.findUserVoById(order.getUserId());
         Map<String, Object> data = new HashMap<>();
         data.put("order", order);
@@ -73,6 +74,23 @@ public class AdminOrderService {
 
         return ResponseUtil.ok(data);
     }
+
+    //商家查询订单的详细信息；(完成但是没有测试)
+    public Object QueryOrderByid(Integer id){
+        //通过ID查到一个订单
+        LitemallShopOrder order = orderService.FindOrderByID(id);
+        //通过关联查到所有的订单商品
+        List<LitemallShoporderGoods> orderGoods = orderGoodsService.queryOrderByOid(id);
+        //先通过订单得到用户的ID，在通过1用户ID查询到用户，结果整和就完成了
+        UserVo user = userService.findUserVoById(order.getUserId());
+        Map<String, Object> data = new HashMap<>();
+        data.put("order", order);
+        data.put("orderGoods", orderGoods);
+        data.put("user", user);
+        return ResponseUtil.ok(data);
+    }
+
+
 
     /**
      * 订单退款

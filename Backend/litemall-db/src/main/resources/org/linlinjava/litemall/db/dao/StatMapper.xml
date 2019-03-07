@@ -28,4 +28,17 @@
         from litemall_order_goods
         group by substr(add_time,1, 10)
     </select>
+
+    <select id="statOrderone" resultType="map">
+        select
+        substr(add_time,1,10) as day,
+        count(id) as orders,
+        count(distinct user_id) as customers,
+        sum(actual_price) as amount,
+        round(sum(actual_price)/count(distinct user_id),2) as pcr
+        from litemall_shop_order
+        where order_status in(103)
+        group by substr(add_time,1,10)
+    </select>
+
 </mapper>

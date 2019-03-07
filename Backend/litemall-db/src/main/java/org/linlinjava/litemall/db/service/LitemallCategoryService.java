@@ -53,6 +53,11 @@ public class LitemallCategoryService {
         return categoryMapper.selectByPrimaryKey(id);
     }
 
+    //通过这个方法查询出属于商品的类别
+    public LitemallCategory findcategoryById(Integer id) {
+        return categoryMapper.selectByPrimaryKey(id);
+    }
+
     public List<LitemallCategory> querySelective(String id, String name, Integer page, Integer size, String sort, String order) {
         LitemallCategoryExample example = new LitemallCategoryExample();
         LitemallCategoryExample.Criteria criteria = example.createCriteria();

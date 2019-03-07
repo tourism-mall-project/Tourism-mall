@@ -2,9 +2,12 @@ package org.linlinjava.litemall.db.service;
 
 import com.github.pagehelper.PageHelper;
 import org.linlinjava.litemall.db.dao.LitemallAdminMapper;
+import org.linlinjava.litemall.db.dao.LitemallShopMapper;
 import org.linlinjava.litemall.db.domain.LitemallAdmin;
 import org.linlinjava.litemall.db.domain.LitemallAdmin.Column;
 import org.linlinjava.litemall.db.domain.LitemallAdminExample;
+import org.linlinjava.litemall.db.domain.LitemallShop;
+import org.linlinjava.litemall.db.domain.LitemallShopExample;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -17,6 +20,8 @@ public class LitemallAdminService {
     private final Column[] result = new Column[]{Column.id, Column.username, Column.avatar, Column.roleIds};
     @Resource
     private LitemallAdminMapper adminMapper;
+    @Resource
+    private LitemallShopMapper shopMapper ;
 
     public List<LitemallAdmin> findAdmin(String username) {
         LitemallAdminExample example = new LitemallAdminExample();
@@ -63,4 +68,23 @@ public class LitemallAdminService {
     public LitemallAdmin findById(Integer id) {
         return adminMapper.selectByPrimaryKeySelective(id, result);
     }
+
+    //--------------------商家入驻----------------------------
+
+    //通过店铺姓名查询店铺，如果有返回值就是证明店铺存在
+    public List<LitemallShop> findshopname(String shopname){
+        LitemallShopExample example = new LitemallShopExample();
+        example.or().andShopnameEqualTo(shopname);
+        return shopMapper.selectByExample(example);
+    }
+
+   //和上面的配套添加
+   public void addshop(LitemallShop shop) {
+      shop.setAddTime(LocalDateTime.now());
+      shopMapper.insertSelective(shop);
+   }
+
+
+
+
 }
