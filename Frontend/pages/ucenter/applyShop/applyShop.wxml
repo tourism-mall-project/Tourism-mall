@@ -1,0 +1,221 @@
+<!--pages/ucenter/applyShop/applyShop.wxml-->
+<!--主容器-->
+<view class="info-container">
+ <img src="../../../static/images/about.png" />
+<!--用户信息-->
+  <form bindsubmit="submitData" >
+    <view class="page-body-setting">
+
+     <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*行业区域:</text>
+         </view>
+         <view class="info-text"> 
+          <input name="" class="input-text" readonly placeholder="请选择行业区域"/>
+         </view>
+      </view>
+    </view>
+
+     <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*所属区域:</text>
+         </view>
+         <view class="info-text"> 
+          <input name="" class="input-text" readonly placeholder="请选择所属区域"/>
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*店内设施:</text>
+         </view>
+         <view class="info-text">
+          <checkbox-group bindchange="checkboxChange">
+            <label class="checkbox" wx:for="{{facilities}}">
+              <checkbox value="{{item.name}}" checked="{{item.checked}}" />{{item.value}}
+            </label>
+          </checkbox-group>
+         </view>          
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*详细地址:</text>
+         </view>
+          <view class="info-text"> 
+            <input name="" class="input-text" disabled placeholder="定位地址" bingtap="nowlocation"/>
+         </view>
+         <view class="info-text"> 
+            <input name="" class="input-text" value="{{locat}}" />
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*上传logo:</text>
+         </view>
+         <view class="info-text"> 
+            <input name="shoplicense" class="input-text" disabled bindtap="aopenActionsheet"
+            placeholder="请点击此处上传"/>
+         </view>
+         <view class="img-view">
+           <image src='{{atempFilePaths}}' class='showimg' mode='aspectFill'></image>
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*店铺名称:</text>
+         </view>
+         <view class="info-text"> 
+          <input name="shopname" class="input-text" placeholder="请填写店铺名称"/>
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*负责人名字:</text>
+         </view>
+         <view class="info-text"> 
+          <input name="username" class="input-text" placeholder="请填写负责人名字"/>
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*门店介绍:</text>
+         </view>
+         <view class="info-text"> 
+          <textarea class="textarea" value="" placeholder="请填写门店介绍"></textarea>
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*客服电话:</text>
+         </view>
+         <view class="info-text"> 
+          <input name="shopphone" class="input-text" placeholder="请填写客服电话" />
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*营业时间:</text>
+         </view>
+         <view class="info-text" bindtap="openActionsheet"> 
+          <input name="shopdotime" class="input-text" placeholder="请填写营业时间"/>
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*营业执照:</text>
+         </view>
+         <view class="info-text"> 
+            <input name="shoplicense" class="input-text" disabled bindtap="bopenActionsheet"
+            placeholder="请点击此处上传"/>
+         </view>
+         <view class="img-view">
+           <image src='{{btempFilePaths}}' class='showimg' mode='aspectFill'></image>
+         </view>
+      </view>
+    </view>
+  
+  
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*门头图片:</text>
+         </view>
+         <view class="info-text"> 
+            <input name="shoplicense" class="input-text" disabled bindtap="copenActionsheet"
+            placeholder="请点击此处上传"/>
+         </view>
+         <view class="img-view">
+           <image src='{{ctempFilePaths}}' class='showimg' mode='aspectFill'></image>
+         </view>
+      </view>
+    </view>
+    
+    <!-- <radio-group name="sex">
+    <radio value="1" checked="true">男</radio>
+    <radio value="0">女</radio>
+    </radio-group>
+    </view>
+    </view>
+    </view> -->
+<!--   
+      <view class="page-body-setting-item" >
+    <view class="own-info-item">
+    <view class="info-name">行业:</view>
+    <view class="info-text"> <picker bindchange="bindIndustryChange" name="industry" value="{{index}}" range="{{array}}">
+      <view class="picker">
+  {{array[index]}}
+      </view>
+    </picker></view>
+    </view>
+    </view> -->
+<!--   
+    <view class="page-body-setting-item" >
+    <view class="own-info-item">
+    <view class="info-name">号码:</view>
+    <view class="info-text">  <input name="phone" class="input-text" maxlength="10" /></view>
+    </view>
+    </view> -->
+  
+    <!-- <view class="page-body-setting-item" >
+    <view class="own-info-item">
+    <view class="info-name">生日:</view>
+    <view class="info-text">
+      <picker name="birthday" bindchange="bindDateChange" mode="date" value="{{date}}" start="1990-01-01" end="2018-12-31">
+      <view class="picker">
+  {{date}}
+      </view>
+    </picker>
+    
+    </view>
+    </view>
+    </view> -->
+  
+    <!-- <view class="page-body-setting-item" >
+    <view class="own-info-item">
+    <view class="info-name">公司:</view>
+    <view class="info-text"> <input name="company" class="input-text" /></view>
+    </view>
+    </view> -->
+  
+    <!-- <view class="page-body-setting-item" >
+    <view class="own-info-item">
+    <view class="info-name">职位:</view>
+    <view class="info-text">  <input name="work" class="input-text" /></view>
+    </view>
+    </view> -->
+  
+    <view>
+      <button class="button" form-type="submit">立即申请</button>
+    </view>
+  
+    </view> 
+  </form>
+</view>

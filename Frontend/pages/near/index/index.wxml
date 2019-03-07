@@ -1,0 +1,28 @@
+<!--pages/near/pindex/pindex.wxml-->
+<view class="container">
+  <view class="nearshop" wx:if="{{hotGoods.length > 0}}">
+    <view class="h">
+      <view>
+        <navigator url="../hotGoods/hotGoods">
+          <text class="txt">下拉刷新获取附近商家</text>
+        </navigator>
+      </view>
+    </view>
+    <view class="b">
+      <view class="item" wx:for="{{hotGoods}}" wx:for-index="index" wx:for-item="item" wx:key="id">
+        <navigator url="/pages/near/shop/shop?id=1005000">
+          <image class="img" src="{{item.picUrl}}" background-size="cover"></image>
+          <view class="right">
+            <view class="text">
+              <text class="name">{{item.name}}</text>
+              <text class="desc">{{item.brief}}</text>
+              <zan-capsule style="margin-left:-11rpx;" color="#A98A47" leftText="距离" 
+              rightText="{{item.retailPrice}}米" />
+            </view>
+          </view>
+        </navigator>
+      </view>
+    </view>
+  </view>
+  <zan-toast id="zan-toast-test" class="refresh-icon"></zan-toast>
+</view>
