@@ -624,7 +624,9 @@ CREATE TABLE `litemall_shopgoods` (
   `add_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
-  PRIMARY KEY (`id`)
+   PRIMARY KEY (`id`)
+   KEY `order_sn` (`order_sn`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商家订单表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -859,6 +861,7 @@ CREATE TABLE `litemall_user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
 --
 -- Table structure for table `litemall_user_formid`
 --
@@ -890,3 +893,4 @@ CREATE TABLE `litemall_user_formid` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2018-12-10 16:59:09
+

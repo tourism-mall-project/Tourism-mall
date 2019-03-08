@@ -28,6 +28,7 @@ import static org.linlinjava.litemall.admin.util.AdminResponseCode.GOODS_UPDATE_
 public class AdminGoodsService {
     private final Log logger = LogFactory.getLog(AdminGoodsService.class);
 
+
     @Autowired
     private LitemallGoodsService goodsService;
     @Autowired
@@ -63,8 +64,9 @@ public class AdminGoodsService {
     }
 
     //商家的查询商品功能
-    public  Object QueryShopOrder(Integer category_id, String name,
+    public  Object QueryShopOrder(String category_id, String name,
                                   Integer page, Integer limit, String sort, String order){
+        System.out.println("category_id"+category_id+"111111111111");
         List<LitemallShopgoods> goodmap=goodsService.querySelectiveBycondition(category_id, name, page, limit, sort,order);
         long total = PageInfo.of(goodmap).getTotal();
         Map<String, Object> data = new HashMap<>();
@@ -401,13 +403,20 @@ public class AdminGoodsService {
 
     //详情
     public Object detail(Integer id) {
+        System.out.println("detail==="+id+"====detail");
         LitemallGoods goods = goodsService.findById(id);
+        System.out.println("detail==="+goods.getName()+"====detail");
         List<LitemallGoodsProduct> products = productService.queryByGid(id);
+        System.out.println("products.size==="+products.size()+"====products.size");
         List<LitemallGoodsSpecification> specifications = specificationService.queryByGid(id);
+        System.out.println("products.size==="+specifications.size()+"====products.size");
         List<LitemallGoodsAttribute> attributes = attributeService.queryByGid(id);
+        System.out.println("products.size==="+attributes.size()+"====products.size");
 
         Integer categoryId = goods.getCategoryId();
+        System.out.println("categoryId==="+categoryId+"====categoryId");
         LitemallCategory category = categoryService.findcategoryById(categoryId);
+        System.out.println("category==="+category.getName()+"====category");
         Integer[] categoryIds = new Integer[]{};
         if (category != null) {
             Integer parentCategoryId = category.getPid();
@@ -420,7 +429,7 @@ public class AdminGoodsService {
         data.put("products", products);
         data.put("attributes", attributes);
         data.put("categoryIds", categoryIds);
-
+        System.out.println("data.size()==="+data.size()+"====data.size()");
         return ResponseUtil.ok(data);
     }
 
@@ -455,10 +464,11 @@ public class AdminGoodsService {
     }
 
 
-    //***************************************************
+    //*****************商家的修改***************************************
 
     private Object validateByGoods(GoodsAllinone goodsAllinone) {
-        LitemallGoods goods = goodsAllinone.getGoods();
+        LitemallShopgoods goods = goodsAllinone.getgoodstwo();
+        //这种都是进行比较
         String name = goods.getName();
         if (StringUtils.isEmpty(name)) {
             return ResponseUtil.badArgument();
@@ -477,7 +487,7 @@ public class AdminGoodsService {
         // 分类可以不设置，如果设置则需要验证分类存在
         Integer categoryId = goods.getCategoryId();
         if (categoryId != null && categoryId != 0) {
-            if (categoryService.findById(categoryId) == null) {
+            if (categoryService.findcategoryById(categoryId) == null) {
                 return ResponseUtil.badArgumentValue();
             }
         }
@@ -525,6 +535,84 @@ public class AdminGoodsService {
         }
 
         return null;
+    }
+
+
+    /**
+     * 编辑商品
+     * <p>
+     * TODO
+     * 目前商品修改的逻辑是
+     * 1. 更新litemall_shopgoods表
+     * 2. 逻辑删除litemall_goods_specification、litemall_goods_attribute、litemall_goods_product
+     * 3. 添加litemall_goods_specification、litemall_goods_attribute、litemall_goods_product
+     * <p>
+     * 这里商品三个表的数据采用删除再添加的策略是因为
+     * 商品编辑页面，支持管理员添加删除商品规格、添加删除商品属性，因此这里仅仅更新是不可能的，
+     * 只能删除三个表旧的数据，然后添加新的数据。
+     * 但是这里又会引入新的问题，就是存在订单商品货品ID指向了失效的商品货品表。
+     * 因此这里会拒绝管理员编辑商品，如果订单或购物车中存在商品。
+     * 所以这里可能需要重新设计。
+     */
+   //商家的修改功能
+    @Transactional
+    public Object updateShopGoods(GoodsAllinone goodsAllinone) {
+        Object error = validateByGoods(goodsAllinone);
+        if (error != null) {
+            return error;
+        }
+
+        LitemallShopgoods goods =goodsAllinone.getgoodstwo();
+        LitemallGoodsAttribute[] attributes = goodsAllinone.getAttributes();
+        LitemallGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
+        LitemallGoodsProduct[] products = goodsAllinone.getProducts();
+
+        Integer id = goods.getId();
+        // 检查是否存在购物车商品或者订单商品
+        // 如果存在则拒绝修改商品。
+
+        //个人理解：下面这个判断模块要不要问题不大
+        if (orderGoodsService.checkExistByGoodsId(id)) {
+            return ResponseUtil.fail(GOODS_UPDATE_NOT_ALLOWED, "商品已经在订单中，不能修改");
+        }
+        if (cartService.checkExist(id)) {
+            return ResponseUtil.fail(GOODS_UPDATE_NOT_ALLOWED, "商品已经在购物车中，不能修改");
+        }
+
+        //将生成的分享图片地址写入数据库
+        String url = qCodeService.createGoodShareImage(goods.getId().toString(), goods.getPicUrl(), goods.getName());
+        goods.setShareUrl(url);
+
+        // 商品基本信息表litemall_goods
+        if (goodsService.updateByGoodsId(goods) == 0) {
+            throw new RuntimeException("更新数据失败");
+        }
+
+        Integer gid = goods.getId();
+        specificationService.deleteByGid(gid);
+        attributeService.deleteByGid(gid);
+        productService.deleteByGid(gid);
+
+        // 商品规格表litemall_goods_specification
+        for (LitemallGoodsSpecification specification : specifications) {
+            specification.setGoodsId(goods.getId());
+            specificationService.add(specification);
+        }
+
+        // 商品参数表litemall_goods_attribute
+        for (LitemallGoodsAttribute attribute : attributes) {
+            attribute.setGoodsId(goods.getId());
+            attributeService.add(attribute);
+        }
+
+        // 商品货品表litemall_product
+        for (LitemallGoodsProduct product : products) {
+            product.setGoodsId(goods.getId());
+            productService.add(product);
+        }
+        qCodeService.createGoodShareImage(goods.getId().toString(), goods.getPicUrl(), goods.getName());
+
+        return ResponseUtil.ok();
     }
 
 

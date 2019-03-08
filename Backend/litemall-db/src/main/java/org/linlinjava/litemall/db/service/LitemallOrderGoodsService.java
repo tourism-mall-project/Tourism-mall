@@ -67,4 +67,13 @@ public class LitemallOrderGoodsService {
         example.or().andGoodsIdEqualTo(goodsId).andDeletedEqualTo(false);
         return orderGoodsMapper.countByExample(example) != 0;
     }
+
+    //通过传过来的ID来进行判断购物车有没有商品
+    public boolean checkExistByGoodsId(Integer goodsId) {
+        LitemallShoporderGoodsExample example = new LitemallShoporderGoodsExample();
+        example.or().andGoodsIdEqualTo(goodsId).andDeletedEqualTo(false);
+        return litemallShoporderGoodsMapper.countByExample(example) != 0;
+    }
+
+
 }

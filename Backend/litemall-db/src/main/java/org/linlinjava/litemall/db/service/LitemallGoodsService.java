@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
+import java.lang.invoke.MethodHandles;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -152,14 +153,22 @@ public class LitemallGoodsService {
     }
 
     //商家的查询商品功能
-     public List<LitemallShopgoods> querySelectiveBycondition(Integer category_id, String name, Integer page, Integer size, String sort, String order) {
+     public List<LitemallShopgoods> querySelectiveBycondition(String category_id, String name, Integer page, Integer size, String sort, String order) {
         LitemallShopgoodsExample example = new LitemallShopgoodsExample();
         LitemallShopgoodsExample.Criteria criteria = example.createCriteria();
 
         if (!StringUtils.isEmpty(category_id)) {
-            criteria.andCategoryIdEqualTo(category_id);
+            System.out.println("00000000000");
+            try{
+              Integer it = Integer.valueOf(category_id);
+              criteria.andCategoryIdEqualTo(it);
+            }catch(Exception e){
+             System.out.println("66666666666");
+            }
+
         }
         if (!StringUtils.isEmpty(name)) {
+            System.out.println("11111111111");
             criteria.andNameLike("%" + name + "%");
         }
         criteria.andDeletedEqualTo(false);

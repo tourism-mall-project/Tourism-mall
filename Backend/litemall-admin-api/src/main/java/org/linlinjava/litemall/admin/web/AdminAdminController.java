@@ -160,6 +160,9 @@ public class AdminAdminController {
     }
 
     //这是添加商户
+    @RequiresPermissions("admin:admin:InputShop")
+    @RequiresPermissionsDesc(menu={"系统管理" , "管理员管理"}, button="添加")
+    @PostMapping("/InputShop")
     public Object InputShop(LitemallShop shop){
         System.out.println("我是添加商户的Controller--------");
         Object error = validatetwo(shop);
