@@ -5,9 +5,12 @@
     <div class="filter-container">
       <el-input v-model="listQuery.goodsSn" clearable class="filter-item" style="width: 200px;" placeholder="请输入商品编号"/>
       <el-input v-model="listQuery.name" clearable class="filter-item" style="width: 200px;" placeholder="请输入商品名称"/>
+	    <el-select v-model="listQuery.goodsClassify" multiple style="width: 200px" class="filter-item" placeholder="请选择商品分类">
+        <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value"/>
+      </el-select>
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
       <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
-      <el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>
+      <!--<el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>-->
     </div>
 
     <!-- 查询结果 -->
@@ -41,16 +44,18 @@
       <el-table-column align="center" label="商品编号" prop="goodsSn"/>
 
       <el-table-column align="center" min-width="100" label="名称" prop="name"/>
-
+			
       <el-table-column align="center" property="iconUrl" label="图片">
         <template slot-scope="scope">
           <img :src="scope.row.picUrl" width="40">
         </template>
       </el-table-column>
 
-      <el-table-column align="center" property="iconUrl" label="分享图">
+			<el-table-column align="center" property="" label="分类">
         <template slot-scope="scope">
-          <img :src="scope.row.shareUrl" width="40">
+          <el-tag>
+          	<!--{{ scope.row.orderStatus | orderStatusFilter }}-->
+          </el-tag>
         </template>
       </el-table-column>
 
@@ -67,7 +72,7 @@
 
       <el-table-column align="center" label="当前价格" prop="retailPrice"/>
 
-      <el-table-column align="center" label="是否新品" prop="isNew">
+      <!--<el-table-column align="center" label="是否新品" prop="isNew">
         <template slot-scope="scope">
           <el-tag :type="scope.row.isNew ? 'success' : 'error' ">{{ scope.row.isNew ? '新品' : '非新品' }}</el-tag>
         </template>
@@ -83,7 +88,7 @@
         <template slot-scope="scope">
           <el-tag :type="scope.row.isOnSale ? 'success' : 'error' ">{{ scope.row.isOnSale ? '在售' : '未售' }}</el-tag>
         </template>
-      </el-table-column>
+      </el-table-column>-->
 
       <el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -118,6 +123,11 @@
     width: 80px;
     margin-right: 10px;
   }
+  .el-dialog img {
+    display: block;
+    width: 100%;
+    height: 100%;
+	}
 </style>
 
 <script>
@@ -125,9 +135,21 @@ import { listGoods, deleteGoods } from '@/api/goods'
 import BackToTop from '@/components/BackToTop'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
+const statusMap = {
+  550: '居家',
+  551: '饮食',
+  552: '服装',
+  553: '配件',
+}
+
 export default {
   name: 'GoodsList',
   components: { BackToTop, Pagination },
+  filters: {
+    orderStatusFilter(status) {
+      return statusMap[status]
+    }
+  },
   data() {
     return {
       list: [],
@@ -143,7 +165,9 @@ export default {
       },
       goodsDetail: '',
       detailDialogVisible: false,
-      downloadLoading: false
+      downloadLoading: false,
+      categoryList: [],
+      statusMap
     }
   },
   created() {
@@ -161,6 +185,10 @@ export default {
         this.total = 0
         this.listLoading = false
       })
+    },
+    //选择商品分类
+    handleCategoryChange(value) {
+      this.goods.categoryId = value[value.length - 1]
     },
     handleFilter() {
       this.listQuery.page = 1
@@ -191,15 +219,15 @@ export default {
         })
       })
     },
-    handleDownload() {
-      this.downloadLoading = true
-      import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['商品ID', '商品编号', '名称', '专柜价格', '当前价格', '是否新品', '是否热品', '是否在售', '首页主图', '宣传图片列表', '商品介绍', '详细介绍', '商品图片', '商品单位', '关键字', '类目ID', '品牌商ID']
-        const filterVal = ['id', 'goodsSn', 'name', 'counterPrice', 'retailPrice', 'isNew', 'isHot', 'isOnSale', 'listPicUrl', 'gallery', 'brief', 'detail', 'picUrl', 'goodsUnit', 'keywords', 'categoryId', 'brandId']
-        excel.export_json_to_excel2(tHeader, this.list, filterVal, '商品信息')
-        this.downloadLoading = false
-      })
-    }
+//  handleDownload() {
+//    this.downloadLoading = true
+//    import('@/vendor/Export2Excel').then(excel => {
+//      const tHeader = ['商品ID', '商品编号', '名称', '专柜价格', '当前价格', '是否新品', '是否热品', '是否在售', '首页主图', '宣传图片列表', '商品介绍', '详细介绍', '商品图片', '商品单位', '关键字', '类目ID', '品牌商ID']
+//      const filterVal = ['id', 'goodsSn', 'name', 'counterPrice', 'retailPrice', 'isNew', 'isHot', 'isOnSale', 'listPicUrl', 'gallery', 'brief', 'detail', 'picUrl', 'goodsUnit', 'keywords', 'categoryId', 'brandId']
+//      excel.export_json_to_excel2(tHeader, this.list, filterVal, '商品信息')
+//      this.downloadLoading = false
+//    })
+//  }
   }
 }
 </script>

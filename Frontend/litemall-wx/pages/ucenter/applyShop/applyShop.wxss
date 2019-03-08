@@ -73,3 +73,11 @@ checkbox-group {
   display: block;
   margin:5px 5px 0px 5px;
 }
+/* 省市区 */
+.tui-picker-detail{
+  padding-left:15px;
+}
+/* 行业 */
+.industry{
+  padding-left:13px;
+}
