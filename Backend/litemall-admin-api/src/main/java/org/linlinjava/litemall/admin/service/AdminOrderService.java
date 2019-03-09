@@ -60,12 +60,25 @@ public class AdminOrderService {
         return ResponseUtil.ok(data);
     }
 
+    //商家查询全部和搜索
+    public Object listAllshopOrder(Integer userId, String orderSn, List<Short> orderStatusArray,
+                       Integer page, Integer limit, String sort, String order) {
+        List<LitemallShopOrder> orderList = orderService.querySelectiveAllShopOrder(userId, orderSn, orderStatusArray, page, limit, sort, order);
+        long total = PageInfo.of(orderList).getTotal();
+
+        Map<String, Object> data = new HashMap<>();
+        data.put("total", total);
+        data.put("items", orderList);
+
+        return ResponseUtil.ok(data);
+    }
+
     public Object detail(Integer id) {
         //通过ID查到一个订单
         LitemallOrder order = orderService.findById(id);
         //通过关联查到所有的订单商品
         List<LitemallOrderGoods> orderGoods = orderGoodsService.queryByOid(id);
-        //先通过订单得到用户的ID，在通过1用户ID查询到用户，结果整和就完成了
+        //先通过订单得到用户的ID，在通过用户ID查询到用户，结果整和就完成了
         UserVo user = userService.findUserVoById(order.getUserId());
         Map<String, Object> data = new HashMap<>();
         data.put("order", order);

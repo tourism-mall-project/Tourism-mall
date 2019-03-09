@@ -1,3 +1,4 @@
+/*
 import router from './router'
 import store from './store'
 import { Message } from 'element-ui'
@@ -19,7 +20,7 @@ const whiteList = ['/login', '/auth-redirect']// no redirect whitelist
 router.beforeEach((to, from, next) => {
   NProgress.start() // start progress bar
   if (getToken()) { // determine if there has token
-    /* has token*/
+    /!* has token*!/
     if (to.path === '/login') {
       next({ path: '/' })
       NProgress.done() // if current page is dashboard will not trigger	afterEach hook, so manually handle it
@@ -48,7 +49,7 @@ router.beforeEach((to, from, next) => {
       }
     }
   } else {
-    /* has no token*/
+    /!* has no token*!/
     if (whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
       next()
     } else {
@@ -61,3 +62,4 @@ router.beforeEach((to, from, next) => {
 router.afterEach(() => {
   NProgress.done() // finish progress bar
 })
+*/

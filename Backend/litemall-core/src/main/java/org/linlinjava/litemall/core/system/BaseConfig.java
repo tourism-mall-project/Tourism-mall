@@ -54,7 +54,12 @@ abstract class BaseConfig {
      * @return
      */
     protected static Integer getConfigInt(String keyName) {
-        return Integer.parseInt(configs.get(keyName));
+        if(null!=configs.get(keyName)){
+            return Integer.parseInt(configs.get(keyName));
+        }
+        else{
+            return (-1);
+        }
     }
 
     /**

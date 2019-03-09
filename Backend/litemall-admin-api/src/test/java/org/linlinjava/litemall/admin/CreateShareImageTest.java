@@ -1,5 +1,6 @@
 package org.linlinjava.litemall.admin;
 
+import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.linlinjava.litemall.core.qcode.QCodeService;
@@ -19,9 +20,15 @@ public class CreateShareImageTest {
     @Autowired
     LitemallGoodsService litemallGoodsService;
 
+
+
+
     @Test
     public void test() {
         LitemallGoods good = litemallGoodsService.findById(1181010);
         qCodeService.createGoodShareImage(good.getId().toString(), good.getPicUrl(), good.getName());
     }
+
+
+
 }

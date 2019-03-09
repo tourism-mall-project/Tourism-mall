@@ -64,9 +64,9 @@ public class AdminStatController {
    //**********************************************************************
     //商家金额的计算
 
-   @RequiresPermissions("admin:stat:order")
-   /*@RequiresPermissionsDesc(menu={"统计管理" , "订单统计"}, button="查询")*/
-   @GetMapping("/order")
+   @RequiresPermissions("admin:stat:statOrderMoney")
+   @RequiresPermissionsDesc(menu={"统计管理" , "订单统计"}, button="查询")
+   @GetMapping("/statOrderMoney")
    public Object statOrderMoney() {
        List<Map> rows = statService.statOrderone();
        String[] columns = new String[]{"day", "orders", "customers", "amount", "pcr"};

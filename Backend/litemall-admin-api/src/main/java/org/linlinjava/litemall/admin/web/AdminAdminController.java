@@ -141,7 +141,6 @@ public class AdminAdminController {
     //-------------商家界面-------------------------------
 
 
-
     //检查商家姓名是否合法
     private Object validatetwo(LitemallShop shop) {
         String name = shop.getShopname();
@@ -160,7 +159,10 @@ public class AdminAdminController {
     }
 
     //这是添加商户
-    public Object InputShop(LitemallShop shop){
+    @RequiresPermissions("admin:admin:InputShop")
+    @RequiresPermissionsDesc(menu={"系统管理" , "管理员管理"}, button="添加")
+    @PostMapping("/InputShop")
+    public Object InputShop(@RequestBody LitemallShop shop){
         System.out.println("我是添加商户的Controller--------");
         Object error = validatetwo(shop);
         if (error != null) {

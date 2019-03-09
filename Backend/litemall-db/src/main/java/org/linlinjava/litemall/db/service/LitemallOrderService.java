@@ -7,6 +7,7 @@ import org.linlinjava.litemall.db.dao.OrderMapper;
 import org.linlinjava.litemall.db.domain.LitemallOrder;
 import org.linlinjava.litemall.db.domain.LitemallOrderExample;
 import org.linlinjava.litemall.db.domain.LitemallShopOrder;
+import org.linlinjava.litemall.db.domain.LitemallShopOrderExample;
 import org.linlinjava.litemall.db.util.OrderUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -123,6 +124,30 @@ public class LitemallOrderService {
         PageHelper.startPage(page, size);
         return litemallOrderMapper.selectByExample(example);
     }
+
+    public List<LitemallShopOrder> querySelectiveAllShopOrder(Integer userId, String orderSn, List<Short> orderStatusArray, Integer page, Integer size, String sort, String order) {
+        LitemallShopOrderExample example = new LitemallShopOrderExample();
+        LitemallShopOrderExample.Criteria criteria = example.createCriteria();
+
+        if (userId != null) {
+            criteria.andUserIdEqualTo(userId);
+        }
+        if (!StringUtils.isEmpty(orderSn)) {
+            criteria.andOrderSnEqualTo(orderSn);
+        }
+        if (orderStatusArray != null && orderStatusArray.size() != 0) {
+            criteria.andOrderStatusIn(orderStatusArray);
+        }
+        criteria.andDeletedEqualTo(false);
+
+        if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(order)) {
+            example.setOrderByClause(sort + " " + order);
+        }
+
+        PageHelper.startPage(page, size);
+        return litemallShopOrderMapper.selectByExample(example);
+    }
+
 
     public int updateWithOptimisticLocker(LitemallOrder order) {
         LocalDateTime preUpdateTime = order.getUpdateTime();
