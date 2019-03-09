@@ -40,12 +40,17 @@
             <!--<property name="suppressAllComments" value="true"/>-->
         </commentGenerator>
 
-        <!--数据库连接信息-->
+        <!--&lt;!&ndash;数据库连接信息&ndash;&gt;-->
         <jdbcConnection driverClass="com.mysql.jdbc.Driver"
                         connectionURL="jdbc:mysql://127.0.0.1:3306/litemall?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;verifyServerCertificate=false&amp;useSSL=false"
                         userId="litemall"
                         password="litemall123456"/>
 
+        <!--<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+                        connectionURL="jdbc:mysql://localhost:3306/litemall?useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;verifyServerCertificate=false&amp;useSSL=false"
+                        userId="root"
+                        password="root"/>
+-->
         <javaTypeResolver>
             <property name="useJSR310Types" value="true"/>
         </javaTypeResolver>

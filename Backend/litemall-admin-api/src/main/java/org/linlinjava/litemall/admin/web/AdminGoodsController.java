@@ -98,8 +98,8 @@ public class AdminGoodsController {
      * @param id
      * @return
      */
-    @RequiresPermissions("admin:goods:read")
-    @RequiresPermissionsDesc(menu = {"商品管理", "商品管理"}, button = "详情")
+  /*  @RequiresPermissions("admin:goods:read")
+    @RequiresPermissionsDesc(menu = {"商品管理", "商品管理"}, button = "详情")*/
     @GetMapping("/detail")
     public Object detail(@NotNull Integer id) {
         System.out.println("1433223==="+id+"====1433223");
@@ -167,7 +167,7 @@ public class AdminGoodsController {
      * @param id
      * @return
      */
-   @RequiresPermissions("admin:goods:detailGoodS")
+    @RequiresPermissions("admin:goods:detailGoodS")
     @RequiresPermissionsDesc(menu = {"商品管理", "商品管理"}, button = "详情")
     @GetMapping("/detailGoodS")
     public  Object detailGoodS(@NotNull Integer id) {

@@ -46,3 +46,6 @@ export function listCatAndBrand() {
     method: 'get'
   })
 }
+
+
+//商家的接口；

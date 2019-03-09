@@ -52,6 +52,7 @@ public class AdminGoodsService {
 
 
     //被模仿的查询
+    @Transactional
     public Object list(String goodsSn, String name,
                        Integer page, Integer limit, String sort, String order) {
         List<LitemallGoods> goodsList = goodsService.querySelective(goodsSn, name, page, limit, sort, order);
@@ -402,6 +403,7 @@ public class AdminGoodsService {
     }
 
     //详情
+    @Transactional
     public Object detail(Integer id) {
         System.out.println("detail==="+id+"====detail");
         LitemallGoods goods = goodsService.findById(id);
@@ -434,6 +436,7 @@ public class AdminGoodsService {
     }
 
     //商家点击查看详情
+    @Transactional
     public Object detailByGoods(Integer id) {
         //查看商品的具体信息
         LitemallShopgoods goods = goodsService.findGoodsById(id);
@@ -614,6 +617,5 @@ public class AdminGoodsService {
 
         return ResponseUtil.ok();
     }
-
 
 }
