@@ -65,6 +65,7 @@ public class AdminGoodsService {
     }
 
     //商家的查询商品功能
+    @Transactional
     public  Object QueryShopOrder(String category_id, String name,
                                   Integer page, Integer limit, String sort, String order){
         System.out.println("category_id"+category_id+"111111111111");
@@ -363,7 +364,7 @@ public class AdminGoodsService {
 
     public Object list2() {
         // http://element-cn.eleme.io/#/zh-CN/component/cascader
-        // 管理员设置“所属分类”
+        //        // 管理员设置“所属分类”
         List<LitemallCategory> l1CatList = categoryService.queryL1();
         List<CatVo> categoryList = new ArrayList<>(l1CatList.size());
 
