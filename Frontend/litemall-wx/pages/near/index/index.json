@@ -1,7 +1,6 @@
 {
   "navigationBarTitleText": "附近",
   "usingComponents": {
-    "zan-capsule": "../../../lib/zanui-weapp/capsule/index",
-    "zan-toast": "../../../lib/zanui-weapp/toast/index"
+    "zan-capsule": "../../../lib/zanui-weapp/capsule/index"
   }
 }

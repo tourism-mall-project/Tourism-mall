@@ -163,7 +163,6 @@ Page({
             showCancel: false
           });
         }
-
         that.requestRegister(res.code);
       }
     });

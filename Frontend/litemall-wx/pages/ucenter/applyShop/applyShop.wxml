@@ -9,7 +9,7 @@
      <view class="page-body-setting-item" >
        <view class="own-info-item">
          <view class="info-name"> 
-          <text>*行业区域:</text>
+          <text>*行业分类:</text>
          </view>
          <view class="info-text">        
            <picker class="industry" mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" 

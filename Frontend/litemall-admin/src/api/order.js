@@ -43,3 +43,11 @@ export function replyComment(data) {
     data
   })
 }
+
+export function allorder(data) {
+  return request({
+    url: '/admin/order/QueryShoplist',
+    method: 'post',
+    data
+  })
+}

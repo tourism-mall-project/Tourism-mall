@@ -1,3 +1,5 @@
+/* eslint-disable */
+alert('foo');
 <template>
   <div class="app-container">
 
@@ -143,7 +145,7 @@
 </style>
 
 <script>
-import { listOrder, shipOrder, refundOrder, detailOrder } from '@/api/order'
+import { allorder } from '@/api/order'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 import checkPermission from '@/utils/permission' // 权限判断函数
 
@@ -209,7 +211,7 @@ export default {
     checkPermission,
     getList() {
       this.listLoading = true
-      listOrder(this.listQuery).then(response => {
+      allorder(this.listQuery).then(response => {
         this.list = response.data.data.items
         this.total = response.data.data.total
         this.listLoading = false

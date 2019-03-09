@@ -1,6 +1,6 @@
 // 以下是业务服务器API地址
 // 本机开发时使用
-var WxApiRoot = 'http://120.79.250.63:8080/wx/';
+var WxApiRoot = 'http://120.79.250.63:8080/'; 
 // 局域网测试使用
 // var WxApiRoot = 'http://192.168.0.101:8080/wx/';
 // 云平台部署时使用
@@ -75,7 +75,7 @@ module.exports = {
   OrderDelete: WxApiRoot + 'order/delete', //删除订单
   OrderConfirm: WxApiRoot + 'order/confirm', //确认收货
   OrderGoods: WxApiRoot + 'order/goods', // 代评价商品信息
-  OrderComment: WxApiRoot + 'order/comment', // 评价订单商品信息
+  OrderComment: WxApiRoot + 'orcoer/comment', // 评价订单商品信息
 
   FeedbackAdd: WxApiRoot + 'feedback/submit', //添加反馈
   FootprintList: WxApiRoot + 'footprint/list', //足迹列表
@@ -99,4 +99,5 @@ module.exports = {
 
   UserIndex: WxApiRoot + 'user/index', //个人页面用户相关信息
 
+  Applyshop: WxApiRoot + 'admin/admin/InputShop', //用户申请成为商家
 };

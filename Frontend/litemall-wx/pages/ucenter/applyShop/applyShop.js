@@ -1,4 +1,6 @@
 // pages/ucenter/applyShop/applyShop.js
+var util = require('../../../utils/util.js');
+var api = require('../../../config/api.js');
 Page({
   /**
    * 页面的初始数据
@@ -8,7 +10,7 @@ Page({
     images: '',
     facilities: [
       { name: '美国', value: '美国' },
-      { name: '中国', value: '中国', checked: 'true' },
+      { name: '中国', value: '中国' },
       { name: '巴西', value: '巴西' },
       { name: '日本', value: '日本' },
       { name: '英国', value: '英国' },
@@ -125,32 +127,119 @@ Page({
   },
   //
   submitData: function (e) {
+    let that = this
+
+    if (e.detail.value.facilities == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: '店内设施不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
+    if (e.detail.value.detailed_address == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: '详细地址不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
+    if (e.detail.value.upload_logo == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: 'logo不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
+    if (e.detail.value.shop_name == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: '店铺名称不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
+    if (e.detail.value.name_personcharge == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: '负责任人名字不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
+    if (e.detail.value.store_introduction == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: '门店介绍不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
+    if (e.detail.value.customer_telephone == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: '客服电话不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
+    if (e.detail.value.business_hours == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: '营业时间不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
+    if (e.detail.value.business_license == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: '营业执照不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
+    if (e.detail.value.doorhead_pictures == 0) {
+      wx.showModal({
+        title: '错误信息',
+        content: '门头图片不能为空',
+        showCancel: false
+      });
+      return false;
+    }
+
     console.log('form发生了submit事件，携带数据为：', e.detail.value)
     this.setData({
+       
       allValue: e.detail.value
     })
-    // wx.request({
-    //   url: api.???,
-    //   data: {
-    //     allValue: e.detail.value
-    //   },
-    //   method: 'POST',
-    //   header: {
-    //     'content-type': 'application/json'
-    //   },
-    //   success: function (res) {
-    //     if (res.data.errno == 0) {
-    //       wx.navigateBack();
-    //     } else {
-    //       wx.showModal({
-    //         title: '申请失败',
-    //         content: res.data.errmsg,
-    //         showCancel: false
-    //       });
-    //     }
-    //   }
-    // });
-
+    wx.request({
+      url: api.Applyshop,
+      data: {
+        allValue: e.detail.value,
+        name_personcharge: e.detail.value
+      },
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        console.log("成功")
+        console.log(res)
+      }
+     
+    })
   },
   onLoad: function (options) {
     // 页面初始化 options为页面跳转所带来的参数

@@ -20,6 +20,7 @@ Page({
       }
     });
   },
+
   /**
    * 生命周期函数--监听页面加载a
    */
@@ -59,17 +60,16 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    const Toast = require('../../../lib/zanui-weapp/toast/toast');
-    Toast({
-      type: 'success',
-      timeout:'1000',
-      message:'刷新成功',
-      selector: '#zan-toast-test'
-    });
-    wx.showNavigationBarLoading() //在标题栏中显示加载
+    wx.showToast({
+      title: '刷新成功',
+      duration: 1000,
+      mask: true,  
+      icon: 'success',  
+      success: function () { },
+      fail: function () { },   
+      complete: function () { }   
+    })
     this.getIndexData();
-    wx.hideNavigationBarLoading() //完成停止加载
-    wx.stopPullDownRefresh() //停止下拉刷新
   },
 
   /**

@@ -1,3 +1,5 @@
+/* eslint-disable */
+alert('foo');
 <template>
   <div class="app-container">
 
