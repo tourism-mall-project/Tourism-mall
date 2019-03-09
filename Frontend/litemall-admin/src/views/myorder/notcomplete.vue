@@ -1,5 +1,4 @@
 /* eslint-disable */
-alert('foo');
 <template>
 </template>
 
