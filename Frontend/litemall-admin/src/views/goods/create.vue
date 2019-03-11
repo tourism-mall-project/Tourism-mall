@@ -421,7 +421,7 @@ export default {
         })
         this.$router.push({ path: '/goods/list' })
       }).catch(response => {
-        MessageBox.alert('业务错误：' + response.data.errmsg, '警告', {
+        MessageBox.alert('业务错误：' + response, '警告', {
           confirmButtonText: '确定',
           type: 'error'
         })

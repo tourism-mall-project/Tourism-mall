@@ -18,7 +18,7 @@ export function deleteGoods(data) {
 
 export function publishGoods(data) {
   return request({
-    url: '/goods/create',
+    url: '/goods/createGoods',
     method: 'post',
     data
   })

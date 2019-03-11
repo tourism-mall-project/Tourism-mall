@@ -163,7 +163,7 @@ Page({
       });
     }else{
       wx.navigateTo({
-        url: "/pages/ucenter/applyShop/applyShop"
+        url: "/pages/auth/login/login"
       });     
     };
   },

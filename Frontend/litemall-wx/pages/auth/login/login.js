@@ -24,14 +24,8 @@ Page({
 
   },
   wxLogin: function(e) {
-    if (e.detail.userInfo == undefined) {
-      app.globalData.hasLogin = false;
-      util.showErrorToast('微信登录失败');
-      return;
-    }
-
+    console.log("11")
     user.checkLogin().catch(() => {
-
       user.loginByWeixin(e.detail.userInfo).then(res => {
         app.globalData.hasLogin = true;
         wx.navigateBack({
@@ -40,14 +34,10 @@ Page({
       }).catch((err) => {
         app.globalData.hasLogin = false;
         util.showErrorToast('微信登录失败');
-        console.log(e.detail.userInfo)
       });
 
     });
-  },
-  accountLogin: function() {
-    wx.navigateTo({
-      url: "/pages/auth/accountLogin/accountLogin"
-    });
   }
 })
+
+

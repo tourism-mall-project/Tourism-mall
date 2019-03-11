@@ -81,3 +81,35 @@ checkbox-group {
 .industry{
   padding-left:13px;
 }
+/* 上传图片 */
+.take-photo{
+  margin:0 0 5px 10px;
+  display: block;
+  width:48px;
+  height: 46px;
+  overflow:hidden;
+  border:1px dashed #eee;
+  position: relative
+}
+.input-photo{
+  opacity: 0;
+  z-index: 88;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0!important;
+  padding: 0!important;
+}
+.take-text{
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10;
+  font-size:80px;
+  color: #eee;
+}

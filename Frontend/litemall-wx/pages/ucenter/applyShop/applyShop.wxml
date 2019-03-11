@@ -72,8 +72,9 @@
          <view class="info-name"> 
           <text>*上传logo:</text>
          </view>
-         <view class="info-text" > 
-            <input class="input-text"  placeholder='点击此处上传' name="upload_logo" bindtap="aopenActionsheet" 
+         <view class="info-text take-photo"> 
+            <text class="take-text">+</text>
+            <input class="input-text input-photo"  placeholder='点击此处上传' name="upload_logo" bindtap="aopenActionsheet" 
               disabled value="{{atempFilePaths}}"/>
          </view>
           <view class="img-view">
@@ -143,8 +144,9 @@
          <view class="info-name"> 
           <text>*营业执照:</text>
          </view>
-         <view class="info-text"> 
-            <input name="business_license" class="input-text" disabled bindtap="bopenActionsheet"
+         <view class="info-text take-photo"> 
+            <text class="take-text">+</text>
+            <input name="business_license" class="input-text input-photo" disabled bindtap="bopenActionsheet"
             placeholder="请点击此处上传" value='{{btempFilePaths}}'/>
          </view>
          <view class="img-view">
@@ -159,8 +161,9 @@
          <view class="info-name"> 
           <text>*门头图片:</text>
          </view>
-         <view class="info-text"> 
-            <input name="doorhead_pictures" class="input-text" disabled bindtap="copenActionsheet"
+         <view class="info-text take-photo">
+            <text class="take-text">+</text> 
+            <input name="doorhead_pictures" class="input-text input-photo" disabled bindtap="copenActionsheet"
             placeholder="请点击此处上传" value="{{ctempFilePaths}}"/>
          </view>
          <view class="img-view">

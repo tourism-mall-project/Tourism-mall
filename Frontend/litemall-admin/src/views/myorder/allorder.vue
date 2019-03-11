@@ -133,6 +133,7 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="refundDialogVisible = false">取消</el-button>
         <el-button type="primary" @click="confirmRefund">确定</el-button>
+        <el-button type="primary" @click="showDetail">查看</el-button>
       </div>
     </el-dialog>
 
@@ -180,7 +181,9 @@ export default {
         name: undefined,
         orderStatusArray: [],
         sort: 'add_time',
-        order: 'desc'
+        order: 'desc',
+        userId: '',
+        orderSn: '',
       },
       statusMap,
       orderDialogVisible: false,
@@ -239,6 +242,11 @@ export default {
       this.$nextTick(() => {
         this.$refs['shipForm'].clearValidate()
       })
+    },
+    //展示细节
+    showDetail(detail) {
+      this.goodsDetail = detail
+      this.detailDialogVisible = true
     },
     confirmShip() {
       this.$refs['shipForm'].validate((valid) => {

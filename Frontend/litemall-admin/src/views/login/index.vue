@@ -36,6 +36,9 @@
           <span> 推广管理员用户名: promotion123</span>
           <span> 推广管理员用户名：promotion123</span>
         </div>
+        <div class="tips">
+        	<router-link to="/shoplogin/shoplogin" tag="a">商家登录</router-link>
+       	</div>
       </div>
     </el-form>
 
