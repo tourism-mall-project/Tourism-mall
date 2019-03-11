@@ -87,6 +87,7 @@ CREATE TABLE `litemall_admin` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='管理员表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+
   DROP TABLE IF EXISTS `litemall_shop`;
   /*商家入驻表*/
   CREATE TABLE `litemall_shop` (
@@ -104,13 +105,15 @@ CREATE TABLE `litemall_admin` (
   `workimg_url` varchar(255) NOT NULL COMMENT '营业执照',
   `storefrontimg_url` varchar(255) NOT NULL COMMENT '门头图片',
   `password` varchar(63) NOT NULL DEFAULT '' COMMENT '管理员密码',
-  /*`last_login_ip` varchar(63) DEFAULT '' COMMENT '最近一次登录IP地址',
-  `last_login_time` datetime DEFAULT NULL COMMENT '最近一次登录时间',
-  `avatar` varchar(255) DEFAULT '''' COMMENT '头像图片',*/
+ /* `last_login_ip` varchar(63) DEFAULT '' COMMENT '最近一次登录IP地址',
+  `last_login_time` datetime DEFAULT NULL COMMENT '最近一次登录时间',*/
+  `avatar` varchar(255) DEFAULT '''' COMMENT '头像图片',
   `add_time` datetime DEFAULT NULL COMMENT '创建时间',
- /* `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
-  `role_ids` varchar(127) DEFAULT '[]' COMMENT '角色列表',*/
+  `balance` varchar(20) NOT NULL DEFAULT '' COMMENT '账户余额',
+  `role_name` varchar(63) NOT NULL DEFAULT '0' COMMENT '角色身份',
+ /* `role_ids` varchar(127) DEFAULT '[]' COMMENT '角色列表',*/
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='商家入住表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -371,7 +374,6 @@ CREATE TABLE `litemall_goods` (
 --
 -- Table structure for table `litemall_goods_attribute`
 --
-
 DROP TABLE IF EXISTS `litemall_goods_attribute`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -552,6 +554,37 @@ CREATE TABLE `litemall_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单表';
  /*!40101 SET character_set_client = @saved_cs_client */;
 
+
+  /*消息表
+  */
+  DROP TABLE IF EXISTS `litemall_information`;
+
+  CREATE TABLE `litemall_information` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `industry_classify` varchar(127) DEFAULT '[]' COMMENT '行业分类',
+  `address` varchar(127) NOT NULL COMMENT '详细地址',
+  `url` varchar(255) NOT NULL COMMENT '上传logo',
+  `shopname` varchar(63) NOT NULL DEFAULT '' COMMENT '店铺名称',
+  `username` varchar(63) NOT NULL DEFAULT '' COMMENT '负责人名称',
+  `shop_introduce` varchar(255) NOT NULL DEFAULT '' COMMENT '门店介绍',
+  `workimg_url` varchar(255) NOT NULL COMMENT '营业执照',
+  `storefrontimg_url` varchar(255) NOT NULL COMMENT '门头图片',
+  `avatar` varchar(255) DEFAULT '''' COMMENT '头像图片',
+  `add_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
+  `states`  varchar(255) DEFAULT '0' COMMENT '状态 0 1 ',
+  `remark` varchar(1023) DEFAULT '' COMMENT '备注 审核意见',
+  `role_name` varchar(63) DEFAULT '0' COMMENT '角色身份 0就是商家',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1181004 DEFAULT CHARSET=utf8mb4 COMMENT='消息表';
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+
+
+
+
+
+
   /* 商家店铺的商品表*/
   DROP TABLE IF EXISTS `litemall_shopgoods`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -598,7 +631,8 @@ CREATE TABLE `litemall_shopgoods` (
     这是商家的订单表
    */
  CREATE TABLE `litemall_shop_order` (
-  `id` int(11) NOT NULL COMMENT'商家ID',
+  `id` int(11) NOT NULL COMMENT '订单ID',
+  `shop_id` int(11) NOT NULL COMMENT '商家ID',
   `user_id` int(11) NOT NULL COMMENT '用户表的用户ID',
   `order_sn` varchar(63) NOT NULL COMMENT '订单编号',
   `order_status` smallint(6) NOT NULL COMMENT '订单状态',
@@ -624,8 +658,9 @@ CREATE TABLE `litemall_shopgoods` (
   `add_time` datetime DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime DEFAULT NULL COMMENT '更新时间',
   `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
-   PRIMARY KEY (`id`)
-   KEY `order_sn` (`order_sn`)
+   PRIMARY KEY (`id`),
+   KEY `order_sn` (`order_sn`),
+   KEY `shop_id` (`shop_id`)
 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商家订单表';
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -643,6 +678,7 @@ DROP TABLE IF EXISTS `litemall_order_goods`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `litemall_order_goods` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `shop_id` int(11) NOT NULL COMMENT '商家ID',
   `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '订单表的订单ID',
   `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品表的商品ID',
   `goods_name` varchar(127) NOT NULL DEFAULT '' COMMENT '商品名称',
@@ -668,7 +704,8 @@ DROP TABLE IF EXISTS `litemall_shoporder_goods`;
  /*商家的订单详情
  */
  CREATE TABLE `litemall_shoporder_goods` (
-  `id` int(11) NOT NULL COMMENT'商家ID',
+  `id` int(11) NOT NULL COMMENT 'ID',
+  `shop_id` int(11) NOT NULL DEFAULT '0' COMMENT '商家ID',
   `order_id` int(11) NOT NULL DEFAULT '0' COMMENT '订单表的订单ID',
   `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '商品表的商品ID',
   `goods_name` varchar(127) NOT NULL DEFAULT '' COMMENT '商品名称',
@@ -684,7 +721,8 @@ DROP TABLE IF EXISTS `litemall_shoporder_goods`;
   `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
   PRIMARY KEY (`id`),
   KEY `order_id` (`order_id`),
-  KEY `goods_id` (`goods_id`)
+  KEY `goods_id` (`goods_id`),
+  key `shop_id`  (`shop_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商家订单详情表';
 /*!40101 SET character_set_client = @saved_cs_client */;
 

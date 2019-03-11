@@ -138,51 +138,9 @@ public class AdminAdminController {
         return ResponseUtil.ok();
     }
 
-    //-------------商家界面-------------------------------
 
 
-    //检查商家姓名是否合法
-    private Object validatetwo(LitemallShop shop) {
-        String name = shop.getShopname();
-        if (StringUtils.isEmpty(name)) {
-            return ResponseUtil.badArgument();
-        }
-        if (!RegexUtil.isUsername(name)) {
-            return ResponseUtil.fail(ADMIN_INVALID_NAME, "店铺名称不符合规定");
-        }
-        String password = shop.getPassword();
-        if (StringUtils.isEmpty(password) || password.length() < 6) {
-            return ResponseUtil.fail(ADMIN_INVALID_PASSWORD, "管理员密码长度不能小于6");
-        }
 
-        return null;
-    }
-
-    //这是添加商户
-    @RequiresPermissions("admin:admin:InputShop")
-    @RequiresPermissionsDesc(menu={"系统管理" , "管理员管理"}, button="添加")
-    @PostMapping("/InputShop")
-    public Object InputShop(@RequestBody LitemallShop shop){
-        System.out.println("我是添加商户的Controller--------");
-        Object error = validatetwo(shop);
-        if (error != null) {
-            return error;
-        }
-
-        //检查店铺是否重名
-        String shopname = shop.getShopname();
-        List<LitemallShop> adminList = adminService.findshopname(shopname);
-        if (adminList.size() > 0) {
-            return ResponseUtil.fail(ADMIN_NAME_EXIST, "商家已经存在，请更改店名");
-        }
-
-        String rawPassword = shop.getPassword();
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodedPassword = encoder.encode(rawPassword);
-        shop.setPassword(encodedPassword);
-        adminService.addshop(shop);
-        return ResponseUtil.ok(shop);
-    }
 
 
 

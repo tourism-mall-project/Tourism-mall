@@ -67,7 +67,7 @@ public class AdminAuthController {
     }
 
     /*
-     *
+     *退出
      */
     @RequiresAuthentication
     @PostMapping("/logout")
