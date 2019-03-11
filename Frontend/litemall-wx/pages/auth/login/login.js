@@ -34,7 +34,6 @@ Page({
 
       user.loginByWeixin(e.detail.userInfo).then(res => {
         app.globalData.hasLogin = true;
-        console.log("1111")
         wx.navigateBack({
           delta: 1
         })

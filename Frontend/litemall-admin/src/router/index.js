@@ -224,7 +224,76 @@ export const asyncRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/myorder',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'myorder',
+    meta: {
+      title: '我的订单',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'allorder',
+        component: () => import('@/views/myorder/allorder'),
+        name: 'allorder',
+        meta: {
+          title: '全部订单',
+          noCache: true
+        }
+      },
+      {
+        path: 'finishorder',
+        component: () => import('@/views/myorder/finishorder'),
+        name: 'finishorder',
+        meta: {
+          title: '已完成订单',
+          noCache: true
+        }
+      },
+      {
+        path: 'notcomplete',
+        component: () => import('@/views/myorder/notcomplete'),
+        name: 'notcomplete',
+        meta: {
+          title: '未完成订单',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/myincome',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    meta: {
+      title: '我的收入',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'balance',
+        component: () => import('@/views/myincome/balance'),
+        name: 'balance',
+        meta: {
+          title: '我的余额',
+          noCache: true
+        }
+      },
+      {
+        path: 'cashdrawal',
+        component: () => import('@/views/myincome/cashdrawal'),
+        name: 'cashdrawal',
+        meta: {
+          title: '提现',
+          noCache: true
+        }
+      }
+    ]
+  },
   {
     path: '/goods',
     component: Layout,
@@ -252,7 +321,7 @@ export const asyncRouterMap = [
         name: 'goodsCreate',
         meta: {
           perms: ['POST /admin/goods/create'],
-          title: '商品上架',
+          title: '商品添加',
           noCache: true
         }
       },
