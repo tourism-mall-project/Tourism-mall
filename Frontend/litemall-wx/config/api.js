@@ -1,6 +1,8 @@
 // 以下是业务服务器API地址
 // 本机开发时使用
-var WxApiRoot = 'http://120.79.250.63:8080/wx/'; 
+  var WxApiRoot = 'http://10.107.30.118:8080/wx/'; 
+// var AdminApiRoot = 'http://10.107.30.118:8080/admin/';
+// var WxApiRoot = 'http://120.79.250.63:8080/wx/'; 
 // 局域网测试使用
 // var WxApiRoot = 'http://192.168.0.101:8080/wx/';
 // 云平台部署时使用
@@ -128,5 +130,5 @@ module.exports = {
 
   UserIndex: WxApiRoot + 'user/index', //个人页面用户相关信息
 
-  Applyshop: WxApiRoot + 'admin/admin/InputShop', //用户申请成为商家
+  Applyshop: WxApiRoot + 'shop/InputShop', //用户申请成为商家
 };

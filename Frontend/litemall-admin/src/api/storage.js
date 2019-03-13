@@ -3,7 +3,7 @@ import request from '@/utils/request'
 export function listStorage(query) {
   return request({
     url: '/storage/list',
-    method: 'get',
+    method: 'post',
     params: query
   })
 }
@@ -40,5 +40,5 @@ export function deleteStorage(data) {
   })
 }
 
-const uploadPath = process.env.BASE_API + '/storage/create'
+const uploadPath = 'http://10.107.30.118:8080/wx' + '/storage/upload'
 export { uploadPath }

@@ -4,6 +4,12 @@
     <el-card class="box-card">
       <h3>商品介绍</h3>
       <el-form ref="goods" :rules="rules" :model="goods" label-width="150px">
+<!--      	<el-form-item label="id" prop="id">
+          <el-input v-model="goods.id"/>
+        </el-form-item>
+        <el-form-item label="shopId" prop="shopId">
+          <el-input v-model="goods.shopId"/>
+        </el-form-item> -->
         <el-form-item label="商品编号" prop="goodsSn">
           <el-input v-model="goods.goodsSn"/>
         </el-form-item>
@@ -38,19 +44,32 @@
             <el-radio :label="false">未售</el-radio>
           </el-radio-group>
         </el-form-item>
-
-        <el-form-item label="商品图片">
-          <el-upload
-            :action="uploadPath"
-            :show-file-list="false"
-            :headers="headers"
-            :on-success="uploadPicUrl"
-            class="avatar-uploader"
-            accept=".jpg,.jpeg,.png,.gif">
-            <img v-if="goods.picUrl" :src="goods.picUrl" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon"/>
-          </el-upload>
-        </el-form-item>
+        
+				<el-form-item label="商品图片">
+					 <el-upload
+						 :action="uploadPath"
+						 :show-file-list="false"
+						 :headers="headers"
+						 :on-success="uploadPicUrl"
+						 class="avatar-uploader"
+						 accept=".jpg,.jpeg,.png,.gif">
+						 <img v-if="goods.picUrl" :src="goods.picUrl" class="avatar">
+						 <i v-else class="el-icon-plus avatar-uploader-icon"/>
+					 </el-upload>
+				 </el-form-item>
+				 
+				<!-- <el-form-item label="商品分享图片">
+				    <el-upload
+				      :action="uploadPath"
+				      :show-file-list="false"
+				      :headers="headers"
+				      :on-success="uploadPicUrl"
+				      class="avatar-uploader"
+				      accept=".jpg,.jpeg,.png,.gif">
+				      <img v-if="goods.picUrl" :src="goods.shareUrl" class="avatar">
+				      <i v-else class="el-icon-plus avatar-uploader-icon"/>
+				    </el-upload>
+				  </el-form-item> -->
 
         <el-form-item label="宣传画廊">
           <el-upload
@@ -87,7 +106,7 @@
         </el-form-item>
 
         <el-form-item label="所属分类">
-          <el-cascader :options="categoryList" expand-trigger="hover" @change="handleCategoryChange"/>
+          <el-cascader :options="categoryId" expand-trigger="hover" @change="handleCategoryChange"/>
         </el-form-item>
 
         <el-form-item label="所属品牌商">
@@ -106,7 +125,7 @@
       </el-form>
     </el-card>
 
-    <el-card class="box-card">
+ <!--    <el-card class="box-card">
       <h3>商品规格</h3>
       <el-row :gutter="20" type="flex" align="middle" style="padding:20px 0;">
         <el-col :span="10">
@@ -146,7 +165,7 @@
         </el-table-column>
       </el-table>
 
-      <el-dialog :visible.sync="specVisiable" title="设置规格">
+       <el-dialog :visible.sync="specVisiable" title="设置规格">
         <el-form
           ref="specForm"
           :rules="rules"
@@ -277,7 +296,7 @@
           <el-button type="primary" @click="handleAttributeAdd">确定</el-button>
         </div>
       </el-dialog>
-    </el-card>
+    </el-card> -->
 
     <div class="op-container">
       <el-button @click="handleCancel">取消</el-button>
@@ -349,7 +368,7 @@ export default {
       newKeywordVisible: false,
       newKeyword: '',
       keywords: [],
-      categoryList: [],
+      categoryId: [],
       brandList: [],
       goods: { picUrl: '', gallery: [] },
       specVisiable: false,
@@ -397,7 +416,7 @@ export default {
   methods: {
     init: function() {
       listCatAndBrand().then(response => {
-        this.categoryList = response.data.data.categoryList
+        this.categoryId = response.data.data.categoryList
         this.brandList = response.data.data.brandList
       })
     },
@@ -414,12 +433,14 @@ export default {
         products: this.products,
         attributes: this.attributes
       }
+				console.log(finalGoods)
       publishGoods(finalGoods).then(response => {
         this.$notify.success({
           title: '成功',
           message: '创建成功'
         })
         this.$router.push({ path: '/goods/list' })
+			
       }).catch(response => {
         MessageBox.alert('业务错误：' + response, '警告', {
           confirmButtonText: '确定',

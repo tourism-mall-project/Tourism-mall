@@ -13,11 +13,12 @@
          </view>
          <view class="info-text">        
            <picker class="industry" mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" 
-           value="{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}" name="industry" 
-           range="{{multiArray}}">
+           value="{{[multiIndex[0],multiIndex[1]]}}" name="industryClassify" 
+           range="{{multiArray}}" >
               <view class="picker">
-              <view>选择行业：</view>
-          {{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}
+              <view>请点击此处选择行业：</view>
+              {{multiArray[0][multiIndex[0]]}}
+              {{multiArray[1][multiIndex[1]]}}
               </view>
            </picker>
          </view>
@@ -30,7 +31,7 @@
           <text>*所属区域:</text>
          </view>
          <view class="tui-picker-content info-text">
-          <picker bindchange="changeRegin" mode = "region" name="subordinate_region" value="{{region}}">
+          <picker bindchange="changeRegion" mode = "region" name="region" value="{{region}}">
             <view class="tui-picker-detail">
             {{region[0]}} - {{region[1]}} - {{region[2]}}</view>
           </picker>
@@ -44,7 +45,7 @@
           <text>*店内设施:</text>
          </view>
          <view class="info-text">
-          <checkbox-group bindchange="checkboxChange" name="facilities">
+          <checkbox-group bindchange="checkboxChange" name="shopFacility">
             <label class="checkbox" wx:for="{{facilities}}">
               <checkbox value="{{item.name}}" checked="{{item.checked}}" />{{item.value}}
             </label>
@@ -59,10 +60,10 @@
           <text>*详细地址:</text>
          </view>
           <view class="info-text"> 
-            <span class="input-text" bindtap="nowlocation">点击获得定位地址</span>
+            <span class="input-text" bindtap="nowlocation">请点击此处获得定位地址</span>
          </view>
          <view class="info-text"> 
-            <input name="detailed_address" class="input-text" value="{{locat}}" />
+            <input name="address" class="input-text" value="{{locat}}" />
          </view>
       </view>
     </view>
@@ -74,7 +75,7 @@
          </view>
          <view class="info-text take-photo"> 
             <text class="take-text">+</text>
-            <input class="input-text input-photo"  placeholder='点击此处上传' name="upload_logo" bindtap="aopenActionsheet" 
+            <input class="input-text input-photo"  placeholder='点击此处上传' name="url" bindtap="aopenActionsheet" 
               disabled value="{{atempFilePaths}}"/>
          </view>
           <view class="img-view">
@@ -90,7 +91,7 @@
           <text>*店铺名称:</text>
          </view>
          <view class="info-text"> 
-          <input name="shop_name" class="input-text" placeholder="请填写店铺名称"/>
+          <input name="shopname" class="input-text" placeholder="请填写店铺名称"/>
          </view>
       </view>
     </view>
@@ -101,7 +102,7 @@
           <text>*负责人名字:</text>
          </view>
          <view class="info-text"> 
-          <input name="name_personcharge" class="input-text" placeholder="请填写负责人名字"/>
+          <input name="username" class="input-text" placeholder="请填写负责人名字"/>
          </view>
       </view>
     </view>
@@ -112,7 +113,7 @@
           <text>*门店介绍:</text>
          </view>
          <view class="info-text"> 
-          <textarea name="store_introduction" class="textarea" value="" placeholder="请填写门店介绍"></textarea>
+          <textarea name="shopIntroduce" class="textarea" value="" placeholder="请填写门店介绍"></textarea>
          </view>
       </view>
     </view>
@@ -123,7 +124,7 @@
           <text>*客服电话:</text>
          </view>
          <view class="info-text"> 
-          <input name="customer_telephone" class="input-text" placeholder="请填写客服电话" />
+          <input name="serviceMobile" class="input-text" placeholder="请填写客服电话" />
          </view>
       </view>
     </view>
@@ -134,7 +135,7 @@
           <text>*营业时间:</text>
          </view>
          <view class="info-text" bindtap="openActionsheet"> 
-          <input name="business_hours" class="input-text" placeholder="请填写营业时间"/>
+          <input name="workTime" class="input-text" placeholder="请填写营业时间"/>
          </view>
       </view>
     </view>
@@ -146,7 +147,7 @@
          </view>
          <view class="info-text take-photo"> 
             <text class="take-text">+</text>
-            <input name="business_license" class="input-text input-photo" disabled bindtap="bopenActionsheet"
+            <input name="workimgUrl" class="input-text input-photo" disabled bindtap="bopenActionsheet"
             placeholder="请点击此处上传" value='{{btempFilePaths}}'/>
          </view>
          <view class="img-view">
@@ -163,7 +164,7 @@
          </view>
          <view class="info-text take-photo">
             <text class="take-text">+</text> 
-            <input name="doorhead_pictures" class="input-text input-photo" disabled bindtap="copenActionsheet"
+            <input name="storefrontimgUrl" class="input-text input-photo" disabled bindtap="copenActionsheet"
             placeholder="请点击此处上传" value="{{ctempFilePaths}}"/>
          </view>
          <view class="img-view">
@@ -171,6 +172,100 @@
          </view>
       </view>
     </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*密码:</text>
+         </view>
+         <view class="info-text" bindtap="openActionsheet"> 
+          <input name="password" class="input-text" placeholder="请填写不少于6位数密码"/>
+         </view>
+      </view>
+    </view>
+
+     <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*头像图片:</text>
+         </view>
+         <view class="info-text take-photo">
+            <text class="take-text">+</text> 
+            <input name="avatar" class="input-text input-photo" disabled bindtap="dopenActionsheet"
+            placeholder="请点击此处上传" value="{{dtempFilePaths}}"/>
+         </view>
+         <view class="img-view">
+           <image src='{{dtempFilePaths}}' class='showimg' mode='aspectFill'></image>
+         </view>
+      </view>
+    </view>
+
+ <!-- <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*addtime:</text>
+         </view>
+         <view class="info-text" bindtap="openActionsheet"> 
+          <input name="addTime" class="input-text" placeholder="请填写营业时间"/>
+         </view>
+      </view>
+    </view>
+
+     <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*updataTime:</text>
+         </view>
+         <view class="info-text" bindtap="openActionsheet"> 
+          <input name="updataTime" class="input-text" placeholder="请填写营业时间"/>
+         </view>
+      </view>
+    </view>
+
+    
+     <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*deteled:</text>
+         </view>
+         <view class="info-text" bindtap="openActionsheet"> 
+          <input name="deleted" class="input-text" placeholder="请填写营业时间"/>
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*balance:</text>
+         </view>
+         <view class="info-text" bindtap="openActionsheet"> 
+          <input name="balance" class="input-text" placeholder="请填写营业时间"/>
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*roleName:</text>
+         </view>
+         <view class="info-text" bindtap="openActionsheet"> 
+          <input name="roleName" class="input-text" placeholder="请填写营业时间"/>
+         </view>
+      </view>
+    </view>
+
+    <view class="page-body-setting-item" >
+       <view class="own-info-item">
+         <view class="info-name"> 
+          <text>*id:</text>
+         </view>
+         <view class="info-text" bindtap="openActionsheet"> 
+          <input name="id" class="input-text" placeholder="请填写营业时间"/>
+         </view>
+      </view>
+    </view> -->
 
     <view>
       <button class="button" form-type="submit">立即申请</button>

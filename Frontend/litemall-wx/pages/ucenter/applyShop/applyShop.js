@@ -9,25 +9,26 @@ Page({
     index: '0',
     images: '',
     facilities: [
-      { name: '美国', value: '美国' },
-      { name: '中国', value: '中国' },
-      { name: '巴西', value: '巴西' },
-      { name: '日本', value: '日本' },
-      { name: '英国', value: '英国' },
-      { name: '法国', value: '法国' },
+      { name: '0', value: '美国0' },
+      { name: '1', value: '美国1' },
+      { name: '2', value: '美国2' },
+      { name: '3', value: '美国3' },
+      { name: '4', value: '美国4' },
+      { name: '5', value: '美国5' },
     ],
     checkArr: ['中国'],
     detailsaddress: '',
     // 省市区三级联动初始化
-    region: ["省", "市", "区"],
+    region: ['北京市', '北京市', '东城区'],
     //多列选择器：
     multiArray: [['行业a', '行业b'], ['a-1', 'a-2']],//二维数组，长度是多少是几列
     multiIndex: [0, 0],
   },
   // 选择地区
-  changeRegin(e) {
+  changeRegion(e) {
+    console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({ 
-      region: e.detail.value ,
+      region: e.detail.value,
       index: e.detail.value
     });
   },
@@ -90,6 +91,20 @@ Page({
       },
     })
   },
+  dopenActionsheet() {
+    let that = this
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],  //可选择原图或压缩后的图片
+      sourceType: ['album', 'camera'], //可选择性开放访问相册、相机
+      success: function (res) {
+        var tempFilePaths = res.tempFilePaths
+        that.setData({
+          dtempFilePaths: tempFilePaths,
+        })
+      },
+    })
+  },
   //定位现在地址
   nowlocation() {
     let that = this
@@ -129,7 +144,7 @@ Page({
   submitData: function (e) {
     let that = this
 
-    if (e.detail.value.facilities == 0) {
+    if (e.detail.value.shopFacility == 0) {
       wx.showModal({
         title: '错误信息',
         content: '店内设施不能为空',
@@ -138,7 +153,7 @@ Page({
       return false;
     }
 
-    if (e.detail.value.detailed_address == 0) {
+    if (e.detail.value.address == 0) {
       wx.showModal({
         title: '错误信息',
         content: '详细地址不能为空',
@@ -147,7 +162,7 @@ Page({
       return false;
     }
 
-    if (e.detail.value.upload_logo == 0) {
+    if (e.detail.value.url == 0) {
       wx.showModal({
         title: '错误信息',
         content: 'logo不能为空',
@@ -156,7 +171,7 @@ Page({
       return false;
     }
 
-    if (e.detail.value.shop_name == 0) {
+    if (e.detail.value.shopname == 0) {
       wx.showModal({
         title: '错误信息',
         content: '店铺名称不能为空',
@@ -165,7 +180,7 @@ Page({
       return false;
     }
 
-    if (e.detail.value.name_personcharge == 0) {
+    if (e.detail.value.username == 0) {
       wx.showModal({
         title: '错误信息',
         content: '负责任人名字不能为空',
@@ -174,7 +189,7 @@ Page({
       return false;
     }
 
-    if (e.detail.value.store_introduction == 0) {
+    if (e.detail.value.shopIntroduce == 0) {
       wx.showModal({
         title: '错误信息',
         content: '门店介绍不能为空',
@@ -183,7 +198,7 @@ Page({
       return false;
     }
 
-    if (e.detail.value.customer_telephone == 0) {
+    if (e.detail.value.serviceMobile == 0) {
       wx.showModal({
         title: '错误信息',
         content: '客服电话不能为空',
@@ -192,7 +207,7 @@ Page({
       return false;
     }
 
-    if (e.detail.value.business_hours == 0) {
+    if (e.detail.value.workTime == 0) {
       wx.showModal({
         title: '错误信息',
         content: '营业时间不能为空',
@@ -201,7 +216,7 @@ Page({
       return false;
     }
 
-    if (e.detail.value.business_license == 0) {
+    if (e.detail.value.workimgUrl == 0) {
       wx.showModal({
         title: '错误信息',
         content: '营业执照不能为空',
@@ -210,7 +225,7 @@ Page({
       return false;
     }
 
-    if (e.detail.value.doorhead_pictures == 0) {
+    if (e.detail.value.storefrontimgUrl == 0) {
       wx.showModal({
         title: '错误信息',
         content: '门头图片不能为空',
@@ -219,24 +234,46 @@ Page({
       return false;
     }
 
+    if (e.detail.value.password == 0 || e.detail.value.password.length < 5) {
+      wx.showModal({
+        title: '密码',
+        content: '密码不能为空,或长度不够',
+        showCancel: false
+      });
+      return false;
+    }
+
+    e.detail.value['region'] = e.detail.value['region'].join('');
+    
     console.log('form发生了submit事件，携带数据为：', e.detail.value)
     this.setData({
-       
-      allValue: e.detail.value
+      // shop_name: e.detail.value.shop_name,
+      allValue: e.detail.value,
     })
     wx.request({
       url: api.Applyshop,
-      data: {
-        allValue: e.detail.value,
-        name_personcharge: e.detail.value
-      },
+      data: e.detail.value,
+        // shop_name: e.detail.value.shop_name,
       method: 'POST',
       header: {
         'content-type': 'application/json'
       },
       success: function (res) {
-        console.log("成功")
-        console.log(res)
+        wx.showModal({
+          title: '提交',
+          content: '已提交成功，请等待审核',
+          showCancel: false,//是否显示取消按钮
+          success: function (res) {
+            if (res.cancel) {
+              //点击取消,默认隐藏弹框
+            } else {
+              //点击确定
+              // wx.switchTab({
+              //   url: '/pages/ucenter/index/index'
+              // });
+            }
+          },  
+        })
       }
      
     })

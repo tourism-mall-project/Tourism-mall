@@ -81,7 +81,7 @@
         </el-form-item>
 
         <el-form-item label="所属分类">
-          <el-cascader :options="categoryList" v-model="categoryIds" expand-trigger="hover" @change="handleCategoryChange"/>
+          <el-cascader :options="categoryId" v-model="categoryIds" expand-trigger="hover" @change="handleCategoryChange"/>
         </el-form-item>
 
         <el-form-item label="所属品牌商">
@@ -136,7 +136,7 @@
           <el-form-item label="规格图片" prop="picUrl">
             <el-upload
               :headers="headers"
-              :action="uploadPath"
+              :action="uploadImage"
               :show-file-list="false"
               :on-success="uploadSpecPicUrl"
               class="avatar-uploader"
@@ -301,7 +301,7 @@ export default {
       newKeyword: '',
       keywords: [],
       galleryFileList: [],
-      categoryList: [],
+      categoryId: [],
       brandList: [],
       categoryIds: [],
       goods: { gallery: [] },
@@ -389,7 +389,7 @@ export default {
       })
 
       listCatAndBrand().then(response => {
-        this.categoryList = response.data.data.categoryList
+        this.categoryId = response.data.data.categoryList
         this.brandList = response.data.data.brandList
       })
     },
@@ -415,7 +415,7 @@ export default {
           this.$router.push({ path: '/goods/list' })
         })
         .catch(response => {
-          MessageBox.alert('业务错误：' + response.data.errmsg, '警告', {
+          MessageBox.alert('业务错误：' + response.data, '警告', {
             confirmButtonText: '确定',
             type: 'error'
           })

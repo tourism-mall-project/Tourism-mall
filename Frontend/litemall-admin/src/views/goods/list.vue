@@ -181,6 +181,7 @@ export default {
         this.list = response.data.data.items
         this.total = response.data.data.total
         this.listLoading = false
+				// console.log(this.list)
       }).catch(() => {
         this.list = []
         this.total = 0
