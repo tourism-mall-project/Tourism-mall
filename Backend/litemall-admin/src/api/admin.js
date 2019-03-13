@@ -39,10 +39,3 @@ export function deleteAdmin(data) {
     data
   })
 }
-
-
-
-
-
-
-

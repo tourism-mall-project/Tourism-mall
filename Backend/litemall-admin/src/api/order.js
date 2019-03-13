@@ -1,9 +1,11 @@
+/* eslint-disable */
 import request from '@/utils/request'
 import Qs from 'qs'
 
+//查询所有订单
 export function listOrder(query) {
   return request({
-    url: '/order/list',
+    url: '/order/QueryShoplist',
     method: 'get',
     params: query,
     paramsSerializer: function(params) {
@@ -12,13 +14,13 @@ export function listOrder(query) {
   })
 }
 
-export function detailOrder(id) {
-  return request({
-    url: '/order/detail',
-    method: 'get',
-    params: { id }
-  })
-}
+// export function detailOrder(id) {
+//   return request({
+//     url: '/order/detail?id=',
+//     method: 'get',
+//     params: { id }
+//   })
+// }
 
 export function shipOrder(data) {
   return request({
@@ -43,3 +45,17 @@ export function replyComment(data) {
     data
   })
 }
+
+
+//商家查询订单的详情：
+export function orderDetail(id) {
+  return request({
+    url: '/order/QueryShopOrder',
+    method: 'get',
+    params: { id }
+  })
+}
+
+
+
+

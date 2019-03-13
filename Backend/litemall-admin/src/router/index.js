@@ -1,3 +1,4 @@
+/* eslint-disable */
 import Vue from 'vue'
 import Router from 'vue-router'
 
@@ -224,7 +225,76 @@ export const asyncRouterMap = [
       }
     ]
   },
-
+  {
+    path: '/myorder',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    name: 'myorder',
+    meta: {
+      title: '我的订单',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'allorder',
+        component: () => import('@/views/myorder/allorder'),
+        name: 'allorder',
+        meta: {
+          title: '全部订单',
+          noCache: true
+        }
+      },
+      {
+        path: 'finishorder',
+        component: () => import('@/views/myorder/finishorder'),
+        name: 'finishorder',
+        meta: {
+          title: '已完成订单',
+          noCache: true
+        }
+      },
+      {
+        path: 'notcomplete',
+        component: () => import('@/views/myorder/notcomplete'),
+        name: 'notcomplete',
+        meta: {
+          title: '未完成订单',
+          noCache: true
+        }
+      }
+    ]
+  },
+  {
+    path: '/myincome',
+    component: Layout,
+    redirect: 'noredirect',
+    alwaysShow: true,
+    meta: {
+      title: '我的收入',
+      icon: 'chart'
+    },
+    children: [
+      {
+        path: 'balance',
+        component: () => import('@/views/myincome/balance'),
+        name: 'balance',
+        meta: {
+          title: '我的余额',
+          noCache: true
+        }
+      },
+      {
+        path: 'cashdrawal',
+        component: () => import('@/views/myincome/cashdrawal'),
+        name: 'cashdrawal',
+        meta: {
+          title: '提现',
+          noCache: true
+        }
+      }
+    ]
+  },
   {
     path: '/goods',
     component: Layout,
@@ -252,7 +322,7 @@ export const asyncRouterMap = [
         name: 'goodsCreate',
         meta: {
           perms: ['POST /admin/goods/create'],
-          title: '商品上架',
+          title: '商品添加',
           noCache: true
         }
       },
@@ -353,7 +423,7 @@ export const asyncRouterMap = [
       }
     ]
   },
-
+	
   {
     path: '/sys',
     component: Layout,
@@ -398,6 +468,47 @@ export const asyncRouterMap = [
     ]
   },
 
+	{
+	  path: '/shopmanage',
+	  component: Layout,
+	  redirect: 'noredirect',
+	  alwaysShow: true,
+	  name: 'shopmanage',
+	  meta: {
+	    title: '商家管理',
+	    icon: 'chart'
+	  },
+	  children: [
+	    {
+	      path: 'shoplist',
+	      component: () => import('@/views/shopmanage/shoplist'),
+	      name: 'shoplist',
+	      meta: {
+	        title: '商家列表',
+	        noCache: true
+	      }
+	    },
+			{
+			  path: 'createshop',
+			  component: () => import('@/views/shopmanage/createshop'),
+			  name: 'createshop',
+			  meta: {
+			    title: '商家添加',
+			    noCache: true
+			  }
+			},
+			{
+			  path: 'edit',
+			  component: () => import('@/views/shopmanage/edit'),
+			  name: 'edit',
+			  meta: {
+			    title: '商家编辑',
+			    noCache: true
+			  }
+			}
+	  ],
+	},
+	
   {
     path: '/stat',
     component: Layout,
@@ -441,47 +552,43 @@ export const asyncRouterMap = [
       }
     ]
   },
-  {
-    path: 'external-link',
-    component: Layout,
-    redirect: 'noredirect',
-    alwaysShow: true,
-    name: 'externalLink',
-    meta: {
-      title: '外链',
-      icon: 'link'
-    },
-    children: [
-      {
-        path: 'https://cloud.tencent.com/product/cos',
-        meta: { title: '腾讯云存储', icon: 'link' }
-      },
-      {
-        path: 'https://cloud.tencent.com/product/sms',
-        meta: { title: '腾讯云短信', icon: 'link' }
-      },
-      {
-        path: 'https://pay.weixin.qq.com/index.php/core/home/login',
-        meta: { title: '微信支付', icon: 'link' }
-      },
-      {
-        path: 'https://mpkf.weixin.qq.com/',
-        meta: { title: '小程序客服', icon: 'link' }
-      },
-      {
-        path: 'https://www.alibabacloud.com/zh/product/oss',
-        meta: { title: '阿里云存储', icon: 'link' }
-      },
-      {
-        path: 'https://www.qiniu.com/products/kodo',
-        meta: { title: '七牛云存储', icon: 'link' }
-      },
-      {
-        path: 'http://www.kdniao.com/api-track',
-        meta: { title: '快递鸟', icon: 'link' }
-      }
-    ]
-  },
+	
+	{
+	  path: '/shopinfo',
+	  component: Layout,
+	  redirect: 'noredirect',
+	  alwaysShow: true,
+	  name: 'shopinfo',
+	  meta: {
+	    title: '商家信息',
+	    icon: 'chart'
+	  },
+	  children: [
+	    {
+	      path: 'modiinfo',
+	      component: () => import('@/views/shopinfo/modiinfo'),
+	      name: 'modiinfo',
+	      meta: {
+	        // perms: ['GET /admin/stat/user'],
+	        title: '个人信息修改',
+	        noCache: true
+	      }
+	    }
+	  ]
+	},
+	
+	{
+	  path: '/modiinfo',
+	  component: Layout,
+	  redirect: 'noredirect',
+	  alwaysShow: true,
+	  name: 'modiinfo',
+	  meta: {
+	    title: '个人信息',
+	    icon: 'chart'
+	  },
+	},
+	
   {
     path: '/profile',
     component: Layout,

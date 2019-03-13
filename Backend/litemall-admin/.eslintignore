@@ -1,3 +1,6 @@
 build/*.js
 config/*.js
 src/assets
+src/views/myorder/*.vue
+src/views/myincome/*.vue
+src/views/goods/*.vue
