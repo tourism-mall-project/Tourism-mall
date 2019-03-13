@@ -50,8 +50,10 @@ public class WxStorageController {
         return key;
     }
 
+    @CrossOrigin
     @PostMapping("/upload")
     public Object upload(@RequestParam("file") MultipartFile file) throws IOException {
+        System.out.println("1233223");
         String originalFilename = file.getOriginalFilename();
         String url = storageService.store(file.getInputStream(), file.getSize(), file.getContentType(), originalFilename);
 

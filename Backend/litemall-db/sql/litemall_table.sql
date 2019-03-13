@@ -101,7 +101,7 @@ CREATE TABLE `litemall_admin` (
   `username` varchar(63) NOT NULL DEFAULT '' COMMENT '负责人名称',
   `shop_introduce` varchar(255) NOT NULL DEFAULT '' COMMENT '广告标题',
   `service_mobile` varchar(20) NOT NULL DEFAULT '' COMMENT '客服电话',
-  `work_time` datetime DEFAULT NULL COMMENT '营业时间',
+  `work_time` varchar(255) DEFAULT NULL COMMENT '营业时间',
   `workimg_url` varchar(255) NOT NULL COMMENT '营业执照',
   `storefrontimg_url` varchar(255) NOT NULL COMMENT '门头图片',
   `password` varchar(63) NOT NULL DEFAULT '' COMMENT '管理员密码',
@@ -615,7 +615,7 @@ CREATE TABLE `litemall_shopgoods` (
   `deleted` tinyint(1) DEFAULT '0' COMMENT '逻辑删除',
   PRIMARY KEY (`id`),
   KEY `goods_sn` (`goods_sn`),
-  KEY `cat_id` (`category_id`),
+  KEY `category_id` (`category_id`),
   KEY `brand_id` (`brand_id`),
   KEY `sort_order` (`sort_order`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1181004 DEFAULT CHARSET=utf8mb4 COMMENT='店家商品基本信息表';

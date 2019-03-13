@@ -5,6 +5,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.linlinjava.litemall.admin.annotation.RequiresPermissionsDesc;
 import org.linlinjava.litemall.admin.dao.GoodsAllinone;
+import org.linlinjava.litemall.admin.dao.ShopGoodsAllinone;
 import org.linlinjava.litemall.admin.service.AdminGoodsService;
 import org.linlinjava.litemall.core.validator.Order;
 import org.linlinjava.litemall.core.validator.Sort;
@@ -142,7 +143,9 @@ public class AdminGoodsController {
     @RequiresPermissions("admin:goods:createGoods")
     @RequiresPermissionsDesc(menu = {"商品管理", "商品管理"}, button = "上架")
     @PostMapping("/createGoods")
-    public Object createGoods(@RequestBody GoodsAllinone goodsAllinone) {
+    public Object createGoods(@RequestBody ShopGoodsAllinone goodsAllinone) {
+       System.out.println("11111111111======="+goodsAllinone.getgoodstwo().getName()+"23232323232");
+       System.out.println("11111111111======="+goodsAllinone.getgoodstwo().getCategoryId());
         return adminGoodsService.createShopGoods(goodsAllinone);
 
     }
@@ -157,7 +160,7 @@ public class AdminGoodsController {
     @RequiresPermissionsDesc(menu = {"商品管理", "商品管理"}, button = "删除")
     @PostMapping("/deleteShopGoods")
     public Object deleteShopGoods(@RequestBody LitemallShopgoods goods) {
-
+        System.out.println("11111111111======="+goods.getId()+"00000000");
         return adminGoodsService.deleteGoods(goods);
     }
 
@@ -171,6 +174,7 @@ public class AdminGoodsController {
     @RequiresPermissionsDesc(menu = {"商品管理", "商品管理"}, button = "详情")
     @GetMapping("/detailGoodS")
     public  Object detailGoodS(@NotNull Integer id) {
+        System.out.println("11111111111======="+id+"00000000");
         return adminGoodsService.detailByGoods(id);
     }
 
@@ -187,7 +191,7 @@ public class AdminGoodsController {
     @RequiresPermissions("admin:goods:updateShopGoods")
     @RequiresPermissionsDesc(menu = {"商品管理", "商品管理"}, button = "编辑")
     @PostMapping("/updateShopGoods")
-    public Object updateShopGoods(@RequestBody GoodsAllinone goodsAllinone) {
+    public Object updateShopGoods(@RequestBody ShopGoodsAllinone goodsAllinone) {
         return adminGoodsService.updateShopGoods(goodsAllinone);
     }
 

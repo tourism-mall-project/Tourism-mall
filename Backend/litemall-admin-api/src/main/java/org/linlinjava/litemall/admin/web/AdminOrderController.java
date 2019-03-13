@@ -114,6 +114,7 @@ public class AdminOrderController {
                        @RequestParam(defaultValue = "10") Integer limit,
                        @Sort @RequestParam(defaultValue = "add_time") String sort,
                        @Order @RequestParam(defaultValue = "desc") String order) {
+        System.out.println("userId"+userId+"................................");
         return adminOrderService.listAllshopOrder(userId, orderSn, orderStatusArray, page, limit, sort, order);
     }
 
@@ -129,10 +130,9 @@ public class AdminOrderController {
     @RequiresPermissionsDesc(menu = {"商场管理", "订单管理"}, button = "订单详情")
     @GetMapping("/QueryShopOrder")
     public Object QueryShopOrder(@NotNull Integer id) {
+        System.out.println("Integer id"+id+"3333333333");
         return adminOrderService.QueryOrderByid(id);
     }
-
-
 
 
 }

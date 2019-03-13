@@ -10,7 +10,6 @@ import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.core.util.bcrypt.BCryptPasswordEncoder;
 import org.linlinjava.litemall.core.validator.Order;
 import org.linlinjava.litemall.core.validator.Sort;
-import org.linlinjava.litemall.db.domain.LitemallAdmin;
 import org.linlinjava.litemall.db.domain.LitemallInformation;
 import org.linlinjava.litemall.db.domain.LitemallShop;
 import org.linlinjava.litemall.db.service.LitemallShopService;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.NotNull;
 
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +89,7 @@ public class AdminShopController {
             return error;
         }
         Integer anothershopId = shop.getId();
+        System.out.println("anothershopId"+anothershopId);
         if (anothershopId == null) {
             return ResponseUtil.badArgument();
         }
@@ -111,7 +112,9 @@ public class AdminShopController {
     @RequiresPermissionsDesc(menu={"系统管理" , "商家管理"}, button="商家详情")
     @GetMapping("/readOnlyShop")
     public Object readOnlyShop(@NotNull Integer id) {
+        System.out.println("readOnlyShop=========="+id);
         LitemallShop shop= litemallShopService.findById(id);
+        System.out.println("shop========="+shop.getAddress());
         return ResponseUtil.ok(shop);
     }
 
@@ -133,18 +136,23 @@ public class AdminShopController {
                        @RequestParam(defaultValue = "10") Integer limit,
                        @Sort @RequestParam(defaultValue = "add_time") String sort,
                        @Order @RequestParam(defaultValue = "desc") String order) {
+        System.out.println("username"+username+"0000000000");
         List<LitemallShop> adminList = litemallShopService.querySelective(username, page, limit, sort, order);
+        System.out.println("=========="+adminList.size()+"============");
         long total = PageInfo.of(adminList).getTotal();
         Map<String, Object> data = new HashMap<>();
         data.put("total", total);
         data.put("items", adminList);
-
         return ResponseUtil.ok(data);
     }
 
     //***************************************
-    //关于商家的登陆
-
+    //关于商家的登陆（思路：通过ID查找到对应的详情，在找到里面的role_name字段，进行if判断）
+      public Object authApp(@NotNull Integer id){
+        System.out.println("登陆的Controller"+id);
+        litemallShopService.inspectLogin(id);
+        return null;
+      }
 
 
 
@@ -168,10 +176,8 @@ public class AdminShopController {
         return ResponseUtil.ok(shop);
     }
 
-
-
     //这是录入到消息表中（商家申请入驻之后，管理员进行判断）
-    @RequiresPermissions("admin:admin:InputInformation")
+    @RequiresPermissions("admin:shop:InputInformation")
     @RequiresPermissionsDesc(menu={"系统管理" , "商家"}, button="消息")
     @PostMapping("/InputInformation")
     public Object InputInformation(@RequestBody LitemallInformation information){
@@ -224,32 +230,31 @@ public class AdminShopController {
     }
 
     //这是添加商户
-    @RequiresPermissions("admin:admin:InputShop")
-    @RequiresPermissionsDesc(menu={"系统管理" , "管理员管理"}, button="同意")
-    @PostMapping("/InputShop")
+//    @RequiresPermissions("admin:shop:InputShop")
+//    @RequiresPermissionsDesc(menu={"系统管理" , "管理员管理"}, button="同意")
+      @GetMapping("/InputShop")
     public Object InputShop(@RequestBody LitemallShop shop){
-        System.out.println("我是添加商户的Controller--------");
+        System.out.println("我是添加商户的Controller--------"+shop.getShopname()+"0000000");
         Object error = validatetwo(shop);
         if (error != null) {
             return error;
         }
 
-        //检查店铺是否重名
-        String shopname = shop.getShopname();
-        List<LitemallShop> adminList = litemallShopService.findshopname(shopname);
-        if (adminList.size() > 0) {
-            return ResponseUtil.fail(ADMIN_NAME_EXIST, "商家已经存在，请更改店名");
-        }
+          //检查店铺是否重名
+          String shopname = shop.getShopname();
+          List<LitemallShop> adminList = litemallShopService.findshopname(shopname);
+          if (adminList.size() > 0) {
+              return ResponseUtil.fail(ADMIN_NAME_EXIST, "商家已经存在，请更改店名");
+          }
 
         String rawPassword = shop.getPassword();
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(rawPassword);
         shop.setPassword(encodedPassword);
+
         litemallShopService.inputshop(shop);
         return ResponseUtil.ok(shop);
     }
-
-
 
 
 }

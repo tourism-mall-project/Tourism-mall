@@ -34,6 +34,7 @@ public class LitemallOrderGoodsService {
 
     //通过ID查询订单详情
     public List<LitemallShoporderGoods> queryOrderByOid(Integer orderId) {
+        System.out.println("queryOrderByOid==="+orderId);
         LitemallShoporderGoodsExample example = new LitemallShoporderGoodsExample();
         example.or().andOrderIdEqualTo(orderId).andDeletedEqualTo(false);
         return litemallShoporderGoodsMapper.selectByExample(example);
