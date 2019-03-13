@@ -4,6 +4,7 @@ import com.github.pagehelper.PageInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.admin.dao.GoodsAllinone;
+import org.linlinjava.litemall.admin.dao.ShopGoodsAllinone;
 import org.linlinjava.litemall.admin.util.CatVo;
 import org.linlinjava.litemall.core.qcode.QCodeService;
 import org.linlinjava.litemall.core.util.ResponseUtil;
@@ -13,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
 import java.math.BigDecimal;
-import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -69,6 +68,7 @@ public class AdminGoodsService {
     public  Object QueryShopOrder(String category_id, String name,
                                   Integer page, Integer limit, String sort, String order){
         System.out.println("category_id"+category_id+"111111111111");
+        System.out.println("category_id"+name+"3333333333");
         List<LitemallShopgoods> goodmap=goodsService.querySelectiveBycondition(category_id, name, page, limit, sort,order);
         long total = PageInfo.of(goodmap).getTotal();
         Map<String, Object> data = new HashMap<>();
@@ -309,14 +309,17 @@ public class AdminGoodsService {
 
     //商家的添加商品
     @Transactional
-    public Object createShopGoods(GoodsAllinone goodsAllinone) {
-        Object error = validate(goodsAllinone);
+    public Object createShopGoods(ShopGoodsAllinone goodsAllinone) {
+        System.out.println("11111111111=======0000000000");
+        Object error = validateByGoods(goodsAllinone);
+        System.out.println("goodsAllinone+"+goodsAllinone);
         if (error != null) {
             return error;
         }
 
         //LitemallGoods goods = goodsAllinone.getGoods();
         LitemallShopgoods goods=goodsAllinone.getgoodstwo();
+        System.out.println("service======"+goods.getName()+"0000000000");
         LitemallGoodsAttribute[] attributes = goodsAllinone.getAttributes();
         LitemallGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
         LitemallGoodsProduct[] products = goodsAllinone.getProducts();
@@ -327,6 +330,7 @@ public class AdminGoodsService {
         }
 
         // 商品基本信息表litemall_goods
+        goods.setId(null);
         goodsService.addGoods(goods);
 
         //将生成的分享图片地址写入数据库
@@ -357,9 +361,6 @@ public class AdminGoodsService {
         }
         return ResponseUtil.ok();
     }
-
-
-
 
 
     public Object list2() {
@@ -470,9 +471,9 @@ public class AdminGoodsService {
 
     //*****************商家的修改***************************************
 
-    private Object validateByGoods(GoodsAllinone goodsAllinone) {
+    private Object validateByGoods(ShopGoodsAllinone goodsAllinone) {
         LitemallShopgoods goods = goodsAllinone.getgoodstwo();
-        //这种都是进行比较
+
         String name = goods.getName();
         if (StringUtils.isEmpty(name)) {
             return ResponseUtil.badArgument();
@@ -544,29 +545,15 @@ public class AdminGoodsService {
 
     /**
      * 编辑商品
-     * <p>
-     * TODO
-     * 目前商品修改的逻辑是
-     * 1. 更新litemall_shopgoods表
-     * 2. 逻辑删除litemall_goods_specification、litemall_goods_attribute、litemall_goods_product
-     * 3. 添加litemall_goods_specification、litemall_goods_attribute、litemall_goods_product
-     * <p>
-     * 这里商品三个表的数据采用删除再添加的策略是因为
-     * 商品编辑页面，支持管理员添加删除商品规格、添加删除商品属性，因此这里仅仅更新是不可能的，
-     * 只能删除三个表旧的数据，然后添加新的数据。
-     * 但是这里又会引入新的问题，就是存在订单商品货品ID指向了失效的商品货品表。
-     * 因此这里会拒绝管理员编辑商品，如果订单或购物车中存在商品。
-     * 所以这里可能需要重新设计。
      */
    //商家的修改功能
     @Transactional
-    public Object updateShopGoods(GoodsAllinone goodsAllinone) {
-        Object error = validateByGoods(goodsAllinone);
-        if (error != null) {
-            return error;
-        }
+    public Object updateShopGoods(ShopGoodsAllinone goodsAllinone) {
+
 
         LitemallShopgoods goods =goodsAllinone.getgoodstwo();
+        System.out.println(goods.getUpdateTime());
+
         LitemallGoodsAttribute[] attributes = goodsAllinone.getAttributes();
         LitemallGoodsSpecification[] specifications = goodsAllinone.getSpecifications();
         LitemallGoodsProduct[] products = goodsAllinone.getProducts();
@@ -582,7 +569,6 @@ public class AdminGoodsService {
         if (cartService.checkExist(id)) {
             return ResponseUtil.fail(GOODS_UPDATE_NOT_ALLOWED, "商品已经在购物车中，不能修改");
         }
-
         //将生成的分享图片地址写入数据库
         String url = qCodeService.createGoodShareImage(goods.getId().toString(), goods.getPicUrl(), goods.getName());
         goods.setShareUrl(url);

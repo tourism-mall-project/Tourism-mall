@@ -181,9 +181,6 @@ public class LitemallGoodsService {
         return litemallShopgoodsMapper.selectByExampleWithBLOBs(example);
     }
 
-
-
-
     /**
      * 获取某个商品信息,包含完整信息
      *

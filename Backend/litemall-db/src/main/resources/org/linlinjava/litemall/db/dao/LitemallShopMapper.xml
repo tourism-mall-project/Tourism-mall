@@ -16,7 +16,7 @@
     <result column="username" jdbcType="VARCHAR" property="username" />
     <result column="shop_introduce" jdbcType="VARCHAR" property="shopIntroduce" />
     <result column="service_mobile" jdbcType="VARCHAR" property="serviceMobile" />
-    <result column="work_time" jdbcType="TIMESTAMP" property="workTime" />
+    <result column="work_time" jdbcType="VARCHAR" property="workTime" />
     <result column="workimg_url" jdbcType="VARCHAR" property="workimgUrl" />
     <result column="storefrontimg_url" jdbcType="VARCHAR" property="storefrontimgUrl" />
     <result column="password" jdbcType="VARCHAR" property="password" />
@@ -320,7 +320,7 @@
       #{region,jdbcType=VARCHAR}, #{shopFacility,jdbcType=VARCHAR,typeHandler=org.linlinjava.litemall.db.mybatis.JsonIntegerArrayTypeHandler}, 
       #{address,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{shopname,jdbcType=VARCHAR}, 
       #{username,jdbcType=VARCHAR}, #{shopIntroduce,jdbcType=VARCHAR}, #{serviceMobile,jdbcType=VARCHAR}, 
-      #{workTime,jdbcType=TIMESTAMP}, #{workimgUrl,jdbcType=VARCHAR}, #{storefrontimgUrl,jdbcType=VARCHAR}, 
+      #{workTime,jdbcType=VARCHAR}, #{workimgUrl,jdbcType=VARCHAR}, #{storefrontimgUrl,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{avatar,jdbcType=VARCHAR}, #{addTime,jdbcType=TIMESTAMP}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{deleted,jdbcType=BIT}, #{balance,jdbcType=VARCHAR}, 
       #{roleName,jdbcType=VARCHAR})
@@ -422,7 +422,7 @@
         #{serviceMobile,jdbcType=VARCHAR},
       </if>
       <if test="workTime != null">
-        #{workTime,jdbcType=TIMESTAMP},
+        #{workTime,jdbcType=VARCHAR},
       </if>
       <if test="workimgUrl != null">
         #{workimgUrl,jdbcType=VARCHAR},
@@ -501,7 +501,7 @@
         service_mobile = #{record.serviceMobile,jdbcType=VARCHAR},
       </if>
       <if test="record.workTime != null">
-        work_time = #{record.workTime,jdbcType=TIMESTAMP},
+        work_time = #{record.workTime,jdbcType=VARCHAR},
       </if>
       <if test="record.workimgUrl != null">
         workimg_url = #{record.workimgUrl,jdbcType=VARCHAR},
@@ -551,7 +551,7 @@
       username = #{record.username,jdbcType=VARCHAR},
       shop_introduce = #{record.shopIntroduce,jdbcType=VARCHAR},
       service_mobile = #{record.serviceMobile,jdbcType=VARCHAR},
-      work_time = #{record.workTime,jdbcType=TIMESTAMP},
+      work_time = #{record.workTime,jdbcType=VARCHAR},
       workimg_url = #{record.workimgUrl,jdbcType=VARCHAR},
       storefrontimg_url = #{record.storefrontimgUrl,jdbcType=VARCHAR},
       `password` = #{record.password,jdbcType=VARCHAR},
@@ -600,7 +600,7 @@
         service_mobile = #{serviceMobile,jdbcType=VARCHAR},
       </if>
       <if test="workTime != null">
-        work_time = #{workTime,jdbcType=TIMESTAMP},
+        work_time = #{workTime,jdbcType=VARCHAR},
       </if>
       <if test="workimgUrl != null">
         workimg_url = #{workimgUrl,jdbcType=VARCHAR},
@@ -647,7 +647,7 @@
       username = #{username,jdbcType=VARCHAR},
       shop_introduce = #{shopIntroduce,jdbcType=VARCHAR},
       service_mobile = #{serviceMobile,jdbcType=VARCHAR},
-      work_time = #{workTime,jdbcType=TIMESTAMP},
+      work_time = #{workTime,jdbcType=VARCHAR},
       workimg_url = #{workimgUrl,jdbcType=VARCHAR},
       storefrontimg_url = #{storefrontimgUrl,jdbcType=VARCHAR},
       `password` = #{password,jdbcType=VARCHAR},

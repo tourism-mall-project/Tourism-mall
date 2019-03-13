@@ -120,7 +120,7 @@ public class AdminAdminController {
 
         if (adminService.updateById(admin) == 0) {
             return ResponseUtil.updatedDataFailed();
-        }
+    }
 
         return ResponseUtil.ok(admin);
     }
@@ -137,13 +137,6 @@ public class AdminAdminController {
         adminService.deleteById(anotherAdminId);
         return ResponseUtil.ok();
     }
-
-
-
-
-
-
-
 
 
 }

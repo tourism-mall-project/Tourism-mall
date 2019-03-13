@@ -22,6 +22,7 @@ public class LitemallUserService {
     }
 
     public UserVo findUserVoById(Integer userId) {
+        System.out.println("userId==="+userId);
         LitemallUser user = findById(userId);
         UserVo userVo = new UserVo();
         userVo.setNickname(user.getNickname());

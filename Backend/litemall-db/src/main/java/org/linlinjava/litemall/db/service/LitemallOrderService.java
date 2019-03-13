@@ -148,7 +148,6 @@ public class LitemallOrderService {
         return litemallShopOrderMapper.selectByExample(example);
     }
 
-
     public int updateWithOptimisticLocker(LitemallOrder order) {
         LocalDateTime preUpdateTime = order.getUpdateTime();
         order.setUpdateTime(LocalDateTime.now());
