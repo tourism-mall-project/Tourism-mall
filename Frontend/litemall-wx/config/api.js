@@ -1,6 +1,6 @@
 // 以下是业务服务器API地址
 // 本机开发时使用
-  var WxApiRoot = 'http://10.107.30.118:8080/wx/'; 
+var WxApiRoot = 'http://120.79.250.63:8080/wx/'; 
 // var AdminApiRoot = 'http://10.107.30.118:8080/admin/';
 // var WxApiRoot = 'http://120.79.250.63:8080/wx/'; 
 // 局域网测试使用

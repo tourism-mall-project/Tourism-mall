@@ -40,5 +40,5 @@ export function deleteStorage(data) {
   })
 }
 
-const uploadPath = 'http://10.107.30.118:8080/wx' + '/storage/upload'
+const uploadPath = 'http://120.79.250.63:8080/wx/storage/upload'
 export { uploadPath }

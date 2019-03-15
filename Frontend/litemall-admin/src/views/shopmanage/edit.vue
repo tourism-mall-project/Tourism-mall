@@ -5,13 +5,17 @@
     <el-card class="box-card">
       <h3>商家编辑</h3>
       <el-form :model="shop" label-width="150px">
-        <el-form-item label="行业分类" prop="industryClassify">
+        <!-- <el-form-item label="行业分类" prop="industryClassify">
       		<el-checkbox-group v-model="checkindust">
       			<el-checkbox :label="1" >123</el-checkbox>
       			<el-checkbox :label="2" >213</el-checkbox>
       			<el-checkbox :label="3" >12qwe3</el-checkbox>
       		</el-checkbox-group>
-        </el-form-item>
+        </el-form-item> -->
+				<el-form-item label="所属分类">
+				  <el-cascader :options="industryClassify" expand-trigger="hover"v-model="categoryIds" @change="handleCategoryChange"
+					placeholder="请选择商品类别"/>
+				</el-form-item>
         <el-form-item label="所属区域" prop="region">
           <el-input v-model="shop.region"/>
         </el-form-item>
@@ -60,11 +64,7 @@
 			  <el-button @click="handleCancel">取消</el-button>
 			  <el-button type="primary" @click="handleEdit">保存</el-button>
 			</div>
-			
     </el-card>
-		
-    
-
   </div>
 </template>
 
@@ -80,9 +80,25 @@ export default {
   data() {
     return {
       shop:{},
-      checklist:[1],
-      checkindust:[0]
-      }
+      checklist:[],
+      checkindust:[],
+			categoryIds: [],
+			industryClassify:[{
+          value: '0',
+          label: '指南1',
+          children: [{
+            value: '0',
+            label: '设计原则1',
+					}],
+					},{
+          value: '1',
+          label: '指南2',
+          children: [{
+            value: '0',
+            label: '设计原则2]',
+					}]
+      }],
+		}
   },
   computed: {
     headers() {
@@ -96,12 +112,19 @@ export default {
   },
   methods: {
     init: function() {
+			
       if (this.$route.query.id == null) {
         return
       }
       const shopid = this.$route.query.id
       detailshop(shopid).then(response => {
         this.shop = response.data.data
+				this.categoryIds= response.data.data.industryClassify
+				console.log(this.categoryIds)
+				console.log(this.industryClassify[this.categoryIds[0]].label)
+				console.log(this.industryClassify[this.categoryIds[0]].children[0].label)
+				
+				// console.log(this.shop)
       })
     },
     handleCancel: function() {
@@ -109,14 +132,13 @@ export default {
     },
     handleEdit: function() {
       const allshop = this.shop
-			console.log(allshop)
-      editshop(allshop)
-        .then(response => {
+			// console.log(allshop)
+      editshop(allshop).then(response => {
           this.$notify.success({
             title: '成功',
             message: '创建成功'
           })
-          this.$router.push({ path: '/shopmanage/shoplist' })
+          // this.$router.push({ path: '/shopmanage/shoplist' })
         })
         .catch(response => {
           MessageBox.alert('业务错误：' + response.data, '警告', {
@@ -161,6 +183,9 @@ export default {
         }
       }
     },
+		handleCategoryChange () {
+			
+		},
     specChanged: function(label) {
       if (label === false) {
         this.specifications = [

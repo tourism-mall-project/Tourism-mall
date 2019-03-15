@@ -60,7 +60,27 @@ Page({
         that.setData({
           atempFilePaths: tempFilePaths,
         })
+        wx.uploadFile({
+          url: 'http://120.79.250.63:8080/wx/storage/fetch', //仅为示例，非真实的接口地址
+          filePath: tempFilePaths[0],
+          name: "file",
+          header: {
+            "Content-Type": "multipart/form-data"
+          },
+          formData: {
+            url: atempFilePaths,
+          },
+          success: function (res) {
+            var data = res.data
+            console.log(data)
+            //do something
+          }
+        })
+
       },
+      fail: function (res) {
+        console.log(res)
+      }
     })
   },
   bopenActionsheet() {
@@ -171,10 +191,10 @@ Page({
       return false;
     }
 
-    if (e.detail.value.shopname == 0) {
+    if (e.detail.value.shopname == 0 || e.detail.value.shopname.length < 6) {
       wx.showModal({
         title: '错误信息',
-        content: '店铺名称不能为空',
+        content: '店铺名称不能为空,或长度不够',
         showCancel: false
       });
       return false;
@@ -259,6 +279,7 @@ Page({
         'content-type': 'application/json'
       },
       success: function (res) {
+        console.log(res)
         wx.showModal({
           title: '提交',
           content: '已提交成功，请等待审核',

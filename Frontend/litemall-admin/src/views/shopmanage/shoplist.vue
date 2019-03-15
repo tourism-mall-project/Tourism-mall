@@ -14,7 +14,7 @@
 			<el-table-column align="center" label="店铺名称" prop="shopname"/>
 			<el-table-column align="center" property="logo" label="logo">
 			  <template slot-scope="scope">
-			    <img :src="scope.row.logo" width="40">
+			    <img :src="scope.row.url" width="40">
 			  </template>
 			</el-table-column>
 			<el-table-column align="center" label="负责人" prop="username"/>
@@ -150,6 +150,7 @@ import Pagination from '@/components/Pagination'
 			getlist () {
 				this.listLoading = true
 				listshops(this.listQuery).then(response => {
+					console.log(response.data)
 				  this.list = response.data.data.items
 				  this.total = response.data.data.total
 				  this.listLoading = false

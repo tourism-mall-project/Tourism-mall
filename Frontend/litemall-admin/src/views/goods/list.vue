@@ -6,9 +6,9 @@
     <div class="filter-container">
       <el-input v-model="listQuery.goodsSn" clearable class="filter-item" style="width: 200px;" placeholder="请输入商品编号"/>
       <el-input v-model="listQuery.name" clearable class="filter-item" style="width: 200px;" placeholder="请输入商品名称"/>
-	    <el-select v-model="listQuery.goodsClassify" multiple style="width: 200px" class="filter-item" placeholder="请选择商品分类">
+	    <!-- <el-select v-model="listQuery.goodsClassify" multiple style="width: 200px" class="filter-item" placeholder="请选择商品分类">
         <el-option v-for="(key, value) in statusMap" :key="key" :label="key" :value="value"/>
-      </el-select>
+      </el-select> -->
       <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">查找</el-button>
       <el-button class="filter-item" type="primary" icon="el-icon-edit" @click="handleCreate">添加</el-button>
       <!--<el-button :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload">导出</el-button>-->
@@ -46,19 +46,25 @@
 
       <el-table-column align="center" min-width="100" label="名称" prop="name"/>
 			
-      <el-table-column align="center" property="iconUrl" label="图片">
+      <el-table-column align="center" property="iconUrl" label="商品图片">
         <template slot-scope="scope">
           <img :src="scope.row.picUrl" width="40">
         </template>
       </el-table-column>
+	  
+	  <el-table-column align="center" property="iconUrl" label="分享图片">
+	    <template slot-scope="scope">
+	      <img :src="scope.row.shareUrl" width="40">
+	    </template>
+	  </el-table-column>
 
-			<el-table-column align="center" property="" label="分类">
+			<!-- <el-table-column align="center" property="" label="分类">
         <template slot-scope="scope">
           <el-tag>
-          	<!--{{ scope.row.orderStatus | orderStatusFilter }}-->
+          	{{ scope.row.orderStatus | orderStatusFilter }}
           </el-tag>
         </template>
-      </el-table-column>
+      </el-table-column> -->
 
       <el-table-column align="center" label="详情" prop="detail">
         <template slot-scope="scope">
@@ -178,10 +184,10 @@ export default {
     getList() {
       this.listLoading = true
       listGoods(this.listQuery).then(response => {
+		  console.log(response)
         this.list = response.data.data.items
         this.total = response.data.data.total
         this.listLoading = false
-				// console.log(this.list)
       }).catch(() => {
         this.list = []
         this.total = 0
@@ -220,16 +226,7 @@ export default {
           message: response.data.errmsg
         })
       })
-    },
-//  handleDownload() {
-//    this.downloadLoading = true
-//    import('@/vendor/Export2Excel').then(excel => {
-//      const tHeader = ['商品ID', '商品编号', '名称', '专柜价格', '当前价格', '是否新品', '是否热品', '是否在售', '首页主图', '宣传图片列表', '商品介绍', '详细介绍', '商品图片', '商品单位', '关键字', '类目ID', '品牌商ID']
-//      const filterVal = ['id', 'goodsSn', 'name', 'counterPrice', 'retailPrice', 'isNew', 'isHot', 'isOnSale', 'listPicUrl', 'gallery', 'brief', 'detail', 'picUrl', 'goodsUnit', 'keywords', 'categoryId', 'brandId']
-//      excel.export_json_to_excel2(tHeader, this.list, filterVal, '商品信息')
-//      this.downloadLoading = false
-//    })
-//  }
+    }
   }
 }
 </script>

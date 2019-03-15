@@ -489,15 +489,6 @@ export const asyncRouterMap = [
 	      }
 	    },
 			{
-			  path: 'createshop',
-			  component: () => import('@/views/shopmanage/createshop'),
-			  name: 'createshop',
-			  meta: {
-			    title: '商家添加',
-			    noCache: true
-			  }
-			},
-			{
 			  path: 'edit',
 			  component: () => import('@/views/shopmanage/edit'),
 			  name: 'edit',
@@ -578,15 +569,26 @@ export const asyncRouterMap = [
 	},
 	
 	{
-	  path: '/modiinfo',
+	  path: '/news',
 	  component: Layout,
 	  redirect: 'noredirect',
 	  alwaysShow: true,
 	  name: 'modiinfo',
 	  meta: {
-	    title: '个人信息',
+	    title: '消息',
 	    icon: 'chart'
 	  },
+		children: [
+		  {
+		    path: 'shopapplynews',
+		    component: () => import('@/views/news/shopapplynews'),
+		    name: 'shopapplynews',
+		    meta: {
+		      title: '商家入驻申请',
+		      noCache: true
+		    }
+		  }
+		]
 	},
 	
   {
