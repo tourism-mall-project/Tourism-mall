@@ -56,27 +56,63 @@ Page({
       sizeType: ['original', 'compressed'],  //可选择原图或压缩后的图片
       sourceType: ['album', 'camera'], //可选择性开放访问相册、相机
       success: function (res) {
+        console.log(res)
         var tempFilePaths = res.tempFilePaths
-        that.setData({
-          atempFilePaths: tempFilePaths,
-        })
         wx.uploadFile({
-          url: 'http://120.79.250.63:8080/wx/storage/fetch', //仅为示例，非真实的接口地址
+          url: 'http://120.79.250.63:8080/wx/storage/upload',
           filePath: tempFilePaths[0],
-          name: "file",
+          name: 'file',
           header: {
-            "Content-Type": "multipart/form-data"
+            "Content-Type": "multipart/form-data"//记得设置
           },
           formData: {
-            url: atempFilePaths,
+            //和服务器约定的token, 一般也可以放在header中
+            'session_token': wx.getStorageSync('session_token')
           },
           success: function (res) {
-            var data = res.data
-            console.log(data)
-            //do something
+            console.log(res)
+            var imgurl = 'http://120.79.250.63:' + JSON.parse(res.data).data.url.split(':')[2]
+            console.log(imgurl)
+            that.setData({
+              "atempFilePaths": imgurl
+            });
           }
         })
-
+      },
+      fail: function (res) {
+        console.log(res)
+      }
+    })
+  },
+  aopenActionsheet() {
+    let that = this
+    wx.chooseImage({
+      count: 1,
+      sizeType: ['original', 'compressed'],  //可选择原图或压缩后的图片
+      sourceType: ['album', 'camera'], //可选择性开放访问相册、相机
+      success: function (res) {
+        console.log(res)
+        var tempFilePaths =  res.tempFilePaths
+        wx.uploadFile({
+          url: 'http://120.79.250.63:8080/wx/storage/upload',
+          filePath: tempFilePaths[0],
+          name: 'file',
+          header: {
+            "Content-Type": "multipart/form-data"//记得设置
+          },
+          formData: {
+            //和服务器约定的token, 一般也可以放在header中
+            'session_token': wx.getStorageSync('session_token')
+          },
+          success: function (res) {
+            console.log(res)
+            var imgurl = 'http://120.79.250.63:' + JSON.parse(res.data).data.url.split(':')[2]
+            console.log(imgurl)
+            that.setData({
+              "atempFilePaths": imgurl
+            });
+          }
+        })
       },
       fail: function (res) {
         console.log(res)
@@ -90,11 +126,32 @@ Page({
       sizeType: ['original', 'compressed'],  //可选择原图或压缩后的图片
       sourceType: ['album', 'camera'], //可选择性开放访问相册、相机
       success: function (res) {
+        console.log(res)
         var tempFilePaths = res.tempFilePaths
-        that.setData({
-          btempFilePaths: tempFilePaths,
+        wx.uploadFile({
+          url: 'http://120.79.250.63:8080/wx/storage/upload',
+          filePath: tempFilePaths[0],
+          name: 'file',
+          header: {
+            "Content-Type": "multipart/form-data"//记得设置
+          },
+          formData: {
+            //和服务器约定的token, 一般也可以放在header中
+            'session_token': wx.getStorageSync('session_token')
+          },
+          success: function (res) {
+            console.log(res)
+            var imgurl = 'http://120.79.250.63:' + JSON.parse(res.data).data.url.split(':')[2]
+            console.log(imgurl)
+            that.setData({
+              "btempFilePaths": imgurl
+            });
+          }
         })
       },
+      fail: function (res) {
+        console.log(res)
+      }
     })
   },
   copenActionsheet() {
@@ -104,11 +161,32 @@ Page({
       sizeType: ['original', 'compressed'],  //可选择原图或压缩后的图片
       sourceType: ['album', 'camera'], //可选择性开放访问相册、相机
       success: function (res) {
+        console.log(res)
         var tempFilePaths = res.tempFilePaths
-        that.setData({
-          ctempFilePaths: tempFilePaths,
+        wx.uploadFile({
+          url: 'http://120.79.250.63:8080/wx/storage/upload',
+          filePath: tempFilePaths[0],
+          name: 'file',
+          header: {
+            "Content-Type": "multipart/form-data"//记得设置
+          },
+          formData: {
+            //和服务器约定的token, 一般也可以放在header中
+            'session_token': wx.getStorageSync('session_token')
+          },
+          success: function (res) {
+            console.log(res)
+            var imgurl = 'http://120.79.250.63:' + JSON.parse(res.data).data.url.split(':')[2]
+            console.log(imgurl)
+            that.setData({
+              "ctempFilePaths": imgurl
+            });
+          }
         })
       },
+      fail: function (res) {
+        console.log(res)
+      }
     })
   },
   dopenActionsheet() {
@@ -118,11 +196,32 @@ Page({
       sizeType: ['original', 'compressed'],  //可选择原图或压缩后的图片
       sourceType: ['album', 'camera'], //可选择性开放访问相册、相机
       success: function (res) {
+        console.log(res)
         var tempFilePaths = res.tempFilePaths
-        that.setData({
-          dtempFilePaths: tempFilePaths,
+        wx.uploadFile({
+          url: 'http://120.79.250.63:8080/wx/storage/upload',
+          filePath: tempFilePaths[0],
+          name: 'file',
+          header: {
+            "Content-Type": "multipart/form-data"//记得设置
+          },
+          formData: {
+            //和服务器约定的token, 一般也可以放在header中
+            'session_token': wx.getStorageSync('session_token')
+          },
+          success: function (res) {
+            console.log(res)
+            var imgurl = 'http://120.79.250.63:' + JSON.parse(res.data).data.url.split(':')[2]
+            console.log(imgurl)
+            that.setData({
+              "dtempFilePaths": imgurl
+            });
+          }
         })
       },
+      fail: function (res) {
+        console.log(res)
+      }
     })
   },
   //定位现在地址
@@ -270,6 +369,8 @@ Page({
       // shop_name: e.detail.value.shop_name,
       allValue: e.detail.value,
     })
+    // that.upload(),
+
     wx.request({
       url: api.Applyshop,
       data: e.detail.value,

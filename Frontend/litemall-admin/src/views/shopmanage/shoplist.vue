@@ -20,7 +20,7 @@
 			<el-table-column align="center" label="负责人" prop="username"/>
 			<el-table-column align="center" label="客服电话" prop="serviceMobile"/>
 			<el-table-column align="center" label="详细地址" prop="address"/>
-			<el-table-column align="center" label="操作" width="200" class-name="small-padding fixed-width">
+			<el-table-column align="center" label="操作" width="280" class-name="small-padding fixed-width">
 			  <template slot-scope="scope">
 			    <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
 				<el-button type="primary" size="mini" @click="handledetail(scope.row)">查看详情</el-button>
@@ -29,7 +29,7 @@
 			</el-table-column>
 		</el-table>
 		
-		<el-dialog :visible.sync="detailDialogVisible" title="商品详情">
+		<el-dialog :visible.sync="detailDialogVisible" title="商家详情">
 		  <div >
 			<el-form label-position="left" class="table-expand" :data="detail">
 				<el-form-item label="id" prop="id">
@@ -60,19 +60,22 @@
 					<el-input v-model="detail.workTime" readonly/>
 				</el-form-item>
 				<el-form-item label="营业执照" prop="workimgUrl">
-					<el-input v-model="detail.workimgUrl" readonly/>
+					<img :src="detail.workimgUrl" alt="" class="shopimg" />
 				</el-form-item>
 				<el-form-item label="logo" prop="url">
-					<el-input v-model="detail.url" readonly/>
+					<img :src="detail.url" alt="" class="shopimg" />
 				</el-form-item>
 				<el-form-item label="更新时间" prop="updateTime">
 					<el-input v-model="detail.updateTime" readonly/>
 				</el-form-item>
 				<el-form-item label="门头图片" prop="storefrontimgUrl">
-					<el-input v-model="detail.storefrontimgUrl" readonly/>
+					<img :src="detail.storefrontimgUrl" alt="" class="shopimg" />
 				</el-form-item>
 				<el-form-item label="头像图片" prop="avatar">
-					<el-input v-model="detail.avatar" readonly/>
+					<img :src="detail.avatar" alt="" class="shopimg" />
+				</el-form-item>
+				<el-form-item label="行业分类" prop="industryClassify">
+					<el-input v-model="detail.industryClassify" readonly/>
 				</el-form-item>
 				<el-button type="primary" size="mini" @click="returndetail">返回</el-button>
 				
@@ -203,5 +206,13 @@ import Pagination from '@/components/Pagination'
 	}
 </script>
 
-<style>
+<style scoped="scoped">
+.fixed-width .el-button--mini {
+    padding: 7px 6px;
+}
+.shopimg{
+	display: block;
+	widows: 100px;
+	height: 100px;
+}
 </style>

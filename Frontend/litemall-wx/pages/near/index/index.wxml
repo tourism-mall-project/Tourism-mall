@@ -1,6 +1,5 @@
 <!--pages/near/pindex/pindex.wxml-->
-<view class="container">
-<button bindtap='getDistance(32.060255, 118.796877, 39.924091, 116.403414)'>23414412</button>
+<view class="container">       
   <view class="nearshop" wx:if="{{hotGoods.length > 0}}">
     <view class="h">
       <view>

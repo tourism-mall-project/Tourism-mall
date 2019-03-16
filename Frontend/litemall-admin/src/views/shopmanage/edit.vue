@@ -12,9 +12,9 @@
       			<el-checkbox :label="3" >12qwe3</el-checkbox>
       		</el-checkbox-group>
         </el-form-item> -->
-				<el-form-item label="所属分类">
-				  <el-cascader :options="industryClassify" expand-trigger="hover"v-model="categoryIds" @change="handleCategoryChange"
-					placeholder="请选择商品类别"/>
+				<el-form-item label="行业分类">
+				  <el-cascader :options="industryClassify" expand-trigger="hover" v-model="categoryIds" @change="handleCategoryChange"
+					placeholder="请选择行业类别"/>
 				</el-form-item>
         <el-form-item label="所属区域" prop="region">
           <el-input v-model="shop.region"/>
@@ -29,9 +29,18 @@
       	<el-form-item label="详细地址" prop="address">
       	  <el-input v-model="shop.address"/>
       	</el-form-item>
-      	<el-form-item label="logo" prop="url">
-      	  <el-input v-model="shop.url"/>
-      	</el-form-item>
+				<el-form-item label="logo">
+				  <el-upload
+				    :headers="headers"
+				    :action="uploadPath"
+				    :show-file-list="false"
+				    :on-success="uploadPicUrla"
+				    class="avatar-uploader"
+				    accept=".jpg,.jpeg,.png,.gif">
+				    <img v-if="shop.url" :src="shop.url" class="avatar">
+				    <i v-else class="el-icon-plus avatar-uploader-icon"/>
+				  </el-upload>
+				</el-form-item>
       	<el-form-item label="店铺名称" prop="shopname">
       	  <el-input v-model="shop.shopname"/>
       	</el-form-item>
@@ -47,18 +56,45 @@
       	<el-form-item label="营业时间" prop="workTime">
       	  <el-input v-model="shop.workTime"/>
       	</el-form-item>
-      	<el-form-item label="营业执照" prop="workimgUrl">
-      	  <el-input v-model="shop.workimgUrl"/>
-      	</el-form-item>
-      	<el-form-item label="门头图片" prop="storefrontimgUrl">
-      	  <el-input v-model="shop.storefrontimgUrl"/>
-      	</el-form-item>
+				<el-form-item label="营业执照">
+				  <el-upload
+				    :headers="headers"
+				    :action="uploadPath"
+				    :show-file-list="false"
+				    :on-success="uploadPicUrlb"
+				    class="avatar-uploader"
+				    accept=".jpg,.jpeg,.png,.gif">
+				    <img v-if="shop.workimgUrl" :src="shop.workimgUrl" class="avatar">
+				    <i v-else class="el-icon-plus avatar-uploader-icon"/>
+				  </el-upload>
+				</el-form-item>
+				<el-form-item label="门头图片">
+				  <el-upload
+				    :headers="headers"
+				    :action="uploadPath"
+				    :show-file-list="false"
+				    :on-success="uploadPicUrlc"
+				    class="avatar-uploader"
+				    accept=".jpg,.jpeg,.png,.gif">
+				    <img v-if="shop.storefrontimgUrl" :src="shop.storefrontimgUrl" class="avatar">
+				    <i v-else class="el-icon-plus avatar-uploader-icon"/>
+				  </el-upload>
+				</el-form-item>
       	<el-form-item label="密码" prop="password">
-      	  <el-input v-model="shop.password"/>
+      	  <el-input v-model="shop.password" placeholder="请输入密码至少6位数"/>
       	</el-form-item>
-      	<el-form-item label="头像" prop="avatar">
-      	  <el-input v-model="shop.avatar"/>
-      	</el-form-item>
+				<el-form-item label="头像">
+				  <el-upload
+				    :headers="headers"
+				    :action="uploadPath"
+				    :show-file-list="false"
+				    :on-success="uploadPicUrld"
+				    class="avatar-uploader"
+				    accept=".jpg,.jpeg,.png,.gif">
+				    <img v-if="shop.avatar" :src="shop.avatar" class="avatar">
+				    <i v-else class="el-icon-plus avatar-uploader-icon"/>
+				  </el-upload>
+				</el-form-item>
       </el-form>
 			<div class="op-container">
 			  <el-button @click="handleCancel">取消</el-button>
@@ -79,25 +115,58 @@ export default {
   name: 'shopsEdit',
   data() {
     return {
+			uploadPath,
       shop:{},
       checklist:[],
       checkindust:[],
 			categoryIds: [],
-			industryClassify:[{
-          value: '0',
-          label: '指南1',
-          children: [{
-            value: '0',
-            label: '设计原则1',
-					}],
-					},{
-          value: '1',
-          label: '指南2',
-          children: [{
-            value: '0',
-            label: '设计原则2]',
-					}]
-      }],
+			industryClassify:[
+				{
+					value:'0',label: '生活服务',
+					children: [
+						{value: '0',label: '旅行社'},{value: '1',label: '培训'},{value: '2',label: '宠物'},{value: '3',label: '齿科'},
+						{value: '4',label: '快照'},{value: '5',label: '冲印'},{value: '6',label: '家政'},{value: '7',label: '婚纱摄影'},
+						{value: '8',label: '婚庆服务'},{value: '9',label: '儿童摄影'},{value: '10',label: '汽车服务'},{value: '11',label: '丽人'},
+						{value: '12',label: '更多生活服务'}
+					],
+				},
+				{
+					value:'1',label: '购物',
+					children: [
+						{value: '0',label: '综合商场'},{value: '1',label: '食品茶酒'},{value: '2',label: '服饰鞋包'},{value: '3',label: '珠宝饰品'},
+						{value: '4',label: '化妆品'},{value: '5',label: '运动户外'},{value: '6',label: '母婴儿童'},{value: '7',label: '数码家电'},
+						{value: '8',label: '家具家居'},{value: '9',label: '书店'},{value: '10',label: '眼镜店'},{value: '11',label: '药店'},
+						{value: '12',label: '超市'},{value: '13',label: '便利店'},{value: '14',label: '其他'}
+					],
+				},
+				{
+					value:'2',label: '运动健身',
+					children: [
+						{value: '0',label: '健身中心'},{value: '1',label: '游泳馆'},{value: '2',label: '羽毛球馆'},{value: '3',label: '瑜伽'},
+						{value: '4',label: '舞蹈'},{value: '5',label: '篮球场'},{value: '6',label: '网球场'},{value: '7',label: '足球场'},
+						{value: '8',label: '高尔夫场'},{value: '9',label: '保龄球馆'},{value: '10',label: '乒乓球馆'},{value: '11',label: '体育场馆'},
+						{value: '12',label: '更多运动场馆'}
+					],
+				},
+				{
+					value:'3',label: '餐饮美食',
+					children: [
+						{value: '0',label: '川菜'},{value: '1',label: '粤菜'},{value: '2',label: '茶馆'},{value: '3',label: '火锅'},
+						{value: '4',label: '烧烤'},{value: '5',label: '海鲜'},{value: '6',label: '特色小吃'},{value: '7',label: '日韩料理'},
+						{value: '8',label: '西餐'},{value: '9',label: '自助餐'},{value: '10',label: '东南亚菜'},{value: '11',label: '面包甜点'},
+						{value: '12',label: '其他'}
+					],
+				},
+				{
+					value:'4',label: '休闲娱乐',
+					children: [
+						{value: '0',label: '咖啡厅'},{value: '1',label: '酒吧'},{value: '2',label: '茶馆'},{value: '3',label: 'KTV'},
+						{value: '4',label: '电影院'},{value: '5',label: '文化艺术'},{value: '6',label: '景点、郊游'},{value: '7',label: '公园'},
+						{value: '8',label: '足疗按摩'},{value: '9',label: '洗浴'},{value: '10',label: '游乐游艺'},{value: '11',label: '台球馆'},
+						{value: '12',label: '桌面游戏'},{value: '13',label: '更多休闲娱乐'}
+					],
+				}
+			],
 		}
   },
   computed: {
@@ -151,9 +220,20 @@ export default {
       this.keywords.splice(this.keywords.indexOf(tag), 1)
       this.goods.keywords = this.keywords.toString()
     },
-    uploadPicUrl: function(response) {
-      this.goods.picUrl = response.data.url
+		//上传图片
+    uploadPicUrla: function(response) {
+       this.shop.url = 'http://120.79.250.63:'+response.data.url.split(':')[2]
     },
+		uploadPicUrlb: function(response) {
+		   this.shop.workimgUrl = 'http://120.79.250.63:'+response.data.url.split(':')[2]
+		},
+		uploadPicUrlc: function(response) {
+		   this.shop.storefrontimgUrl = 'http://120.79.250.63:'+response.data.url.split(':')[2]
+		},
+		uploadPicUrld: function(response) {
+		   this.shop.avatar = 'http://120.79.250.63:'+response.data.url.split(':')[2]
+		},
+		
     uploadOverrun: function() {
       this.$message({
         type: 'error',
@@ -205,3 +285,15 @@ export default {
   }
 }
 </script>
+
+<style scoped="scoped">
+	.avatar{
+		display: block;
+		width: 150px;
+		height: 150px;
+		object-fit: contain;
+		border: 1px dashed #dcdfe6;
+    border-radius: 8px;
+    outline: none;
+	}
+</style>

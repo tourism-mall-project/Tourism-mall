@@ -75,8 +75,9 @@
          </view>
          <view class="info-text take-photo"> 
             <text class="take-text">+</text>
-            <input class="input-text input-photo"  placeholder='点击此处上传' name="url" bindtap="aopenActionsheet" 
-              disabled value="{{atempFilePaths}}"/>
+            <input class="input-text input-photo" 
+            placeholder='点击此处上传' name="url" bindtap="aopenActionsheet" 
+              disabled value="{{atempFilePaths}}" data-id='atempFilePaths'/>
          </view>
           <view class="img-view">
            <image src='{{atempFilePaths}}' value="{{atempFilePaths}}" class='showimg' mode='aspectFill'></image>

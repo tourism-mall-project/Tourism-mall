@@ -16,7 +16,6 @@ Page({
         that.setData({
           hotGoods: res.data.hotGoodsList,          
         });
-        // console.log(res)
       }
     });
   },
@@ -33,7 +32,6 @@ Page({
     var r = 6378137; //米
     var distance = r * 2 * Math.asin(Math.sqrt(Math.pow(Math.sin(a / 2), 2) + Math.cos(rad1) * Math.cos(rad2) * Math.pow(Math.sin(b / 2), 2)));
     distance = distance.toFixed(2)
-    console.log(distance + '米')
     // if (distance > 1000){
     //   distance = Math.round(distance / 1000);
     // }
@@ -88,25 +86,45 @@ Page({
       fail: function () { },   
       complete: function () { }   
     })
+    var test = [{ lat2: 32.012532, lng2: 118.772945, id: "00001"  },
+                { lat2: 31.012532, lng2: 118.772945, id: "00002" },
+                { lat2: 32.010971, lng2: 118.769235, id: "00003" },
+                { lat2: 32.044785, lng2: 118.790991, id: "00004" },]
     this.getIndexData();
+    var that = this
     wx.getLocation({
       type: 'wgs84',
       success: function (res) {
-        console.log(res)
-        var lat11 = res.latitude
-        var lng11 = res.longitude
+        var lat1 = res.latitude
+        var lng1 = res.longitude
+        var disall = []
+        for (var i=0; i<test.length; i++){
+          var lat2 = test[i].lat2
+          var lng2 = test[i].lng2
+          var id = test[i].id
+          var disone = that.getDistance(lat1, lng1, lat2, lng2)
+          let json = {
+            distance: disone,
+            id: id,
+          }
+          var a = '{\"distance\":' + disone + ',' + "\"id\":" +  id + '}'
+          disall.push(json);        
+        }
+        var nears=[];
+        for(var j=0; j<disall.length; j++){
+          if (disall[j].distance <= 5000.00){
+                nears.push(disall[j])
+            }else{
+            
+          } 
+        }
+        console.log(nears)
       },
       fail: function (res) {
-        console.log(res);
+        // console.log(res);
       }
     })
-    let lat1 = 32.060255
-    let lng1 = 118.796877
-    let lat2 = 32.012532
-    let lng2 = 118.772945
-    this.getDistance(lat1, lng1, lat2, lng2)
   },
-  // 12700247.813747514
   /**
    * 页面上拉触底事件的处理函数
    */

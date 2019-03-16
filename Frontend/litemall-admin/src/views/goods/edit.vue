@@ -350,7 +350,7 @@ export default {
 			categoryList: [],
       brandList: [],
       categoryIds: [],
-      goods: {  gallery: []},
+      goods: { picUrl: '', shareUrl:'', gallery: [] },
       specVisiable: false,
       specForm: { specification: '', value: '', picUrl: '' },
       specifications: [{ specification: '规格', value: '标准', picUrl: '' }],
@@ -455,7 +455,6 @@ export default {
         products: this.products,
         attributes: this.attributes
       }
-			console.log()
       editGoods(finalGoods).then(response => {
 					console.log(response.data)
           this.$notify.success({
