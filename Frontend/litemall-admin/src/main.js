@@ -18,8 +18,11 @@ import './icons' // icon
 import './permission' // permission control
 
 import * as filters from './filters' // global filters
-
 import permission from '@/directive/permission/index.js' // 权限判断指令
+
+
+import Config from '@/config/config.js'
+Vue.use(Config)
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'medium', // set element-ui default size

@@ -57,44 +57,9 @@ Page({
       sourceType: ['album', 'camera'], //可选择性开放访问相册、相机
       success: function (res) {
         console.log(res)
-        var tempFilePaths = res.tempFilePaths
-        wx.uploadFile({
-          url: 'http://120.79.250.63:8080/wx/storage/upload',
-          filePath: tempFilePaths[0],
-          name: 'file',
-          header: {
-            "Content-Type": "multipart/form-data"//记得设置
-          },
-          formData: {
-            //和服务器约定的token, 一般也可以放在header中
-            'session_token': wx.getStorageSync('session_token')
-          },
-          success: function (res) {
-            console.log(res)
-            var imgurl = 'http://120.79.250.63:' + JSON.parse(res.data).data.url.split(':')[2]
-            console.log(imgurl)
-            that.setData({
-              "atempFilePaths": imgurl
-            });
-          }
-        })
-      },
-      fail: function (res) {
-        console.log(res)
-      }
-    })
-  },
-  aopenActionsheet() {
-    let that = this
-    wx.chooseImage({
-      count: 1,
-      sizeType: ['original', 'compressed'],  //可选择原图或压缩后的图片
-      sourceType: ['album', 'camera'], //可选择性开放访问相册、相机
-      success: function (res) {
-        console.log(res)
         var tempFilePaths =  res.tempFilePaths
         wx.uploadFile({
-          url: 'http://120.79.250.63:8080/wx/storage/upload',
+          url: 'https://139.199.222.72:3389/wx/storage/upload',
           filePath: tempFilePaths[0],
           name: 'file',
           header: {

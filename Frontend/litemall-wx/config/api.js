@@ -1,12 +1,13 @@
 // 以下是业务服务器API地址
 // 本机开发时使用
-var WxApiRoot = 'http://120.79.250.63:8080/wx/'; 
+var WxApiRoot = 'https://139.199.222.72:3389/wx/'; 
+// var WxApiRoot = 'http://120.79.250.63:8080/wx/'; 
 // var AdminApiRoot = 'http://10.107.30.118:8080/admin/';
 // var WxApiRoot = 'http://120.79.250.63:8080/wx/'; 
 // 局域网测试使用
 // var WxApiRoot = 'http://192.168.0.101:8080/wx/';
 // 云平台部署时使用
-// var WxApiRoot = 'http://122.152.206.172:8080/wx/';
+// var WxApiRoot = 'http://122.152.206.172:8080/wx/'; 
 // 云平台上线时使用
 // var WxApiRoot = 'https://www.menethil.com.cn/wx/';
 
@@ -16,7 +17,7 @@ function getIOSQualification(then) {
   var that = this
 
   wx.request({
-    url: "http://120.79.250.63:8080/wx/auth/login_by_weixin",
+    url: "https://139.199.222.72:3389/wx/auth/login_by_weixin",
 
 
     header: {
